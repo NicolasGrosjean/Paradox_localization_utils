@@ -30,9 +30,11 @@ def add_missing_line(source_file_path, dest_file_path):
                     f.write(source_lines[i])
                     continue
                 if key in dest_texts:
-                    f.write(' ' + key + ':' + str(dest_texts[key]['version']) + ' "' + dest_texts[key]['value'] + '"\n')
+                    dest_version = '' if dest_texts[key]['version'] is None else str(dest_texts[key]['version'])
+                    f.write(' ' + key + ':' + dest_version + ' "' + dest_texts[key]['value'] + '"\n')
                 else:
-                    f.write(' ' + key + ':' + str(version) + ' "' + value + '"\n')
+                    dest_version = '' if version is None else str(version)
+                    f.write(' ' + key + ':' + str(dest_version) + ' "' + value + '"\n')
 
 
 if __name__ == '__main__':

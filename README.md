@@ -23,9 +23,9 @@ activate paradox_loc
 python src/add_missing_lines.py <source_dir> <dest_dir>
 ```
 
-Example to add in French files mmissing lines from English files
+Example to add in French files missing lines from English files
 ```
-python src/add_missing_lines.py <...>\game\localization\english <...>\game\localization\french
+python src/add_missing_lines.py "<...>\game\localization\english" "<...>\game\localization\french"
 ```
 
 ## Tests
