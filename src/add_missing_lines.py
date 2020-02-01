@@ -13,7 +13,7 @@ def get_args():
     return parser.parse_args()
 
 
-def add_missing_line(source_file_path, dest_file_path):
+def add_missing_line(source_file_path, dest_file_path, old_lines_file_path):
     dest_texts, dest_first_line = file_to_keys_and_values(dest_file_path)
 
     with open(source_file_path, 'r', encoding='utf8') as f:
@@ -32,9 +32,14 @@ def add_missing_line(source_file_path, dest_file_path):
                 if key in dest_texts:
                     dest_version = '' if dest_texts[key]['version'] is None else str(dest_texts[key]['version'])
                     f.write(' ' + key + ':' + dest_version + ' "' + dest_texts[key]['value'] + '"\n')
+                    del dest_texts[key]
                 else:
                     dest_version = '' if version is None else str(version)
                     f.write(' ' + key + ':' + str(dest_version) + ' "' + value + '"\n')
+    with open(old_lines_file_path, 'a', encoding='utf8') as f:
+        for k, v in dest_texts.items():
+            dest_version = '' if v['version'] is None else str(v['version'])
+            f.write(' ' + k + ':' + dest_version + ' "' + v['value'] + '"\n')
 
 
 if __name__ == '__main__':
@@ -49,4 +54,5 @@ if __name__ == '__main__':
             if name not in name_to_dest_path:
                 print(f'File {name} doesn\'t exists for destination language')
             else:
-                add_missing_line(os.path.abspath(os.path.join(root, file)), name_to_dest_path[name])
+                add_missing_line(os.path.abspath(os.path.join(root, file)), name_to_dest_path[name],
+                                 os.path.abspath(os.path.join(args.dest_dir, '..', 'old_lines.yml')))
