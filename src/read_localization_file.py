@@ -23,12 +23,12 @@ def get_key_value_and_version(line):
     :param line: string representing the line of a Paradox localization file
     :return: (localization key, value corresponding to the localization key, version of the value)
     """
-    if '#' in line and line.count('#') == 1:
-        split_comments = line.split("#")
-        uncommented = split_comments[0]
-    else:
-        uncommented = line
-    split_line = uncommented.split(':')
+    i = 0
+    while i < len(line) and line[i] == ' ':
+        i += 1
+    if i < len(line) and line[i] == '#':
+        raise BadLocalizationException('Comment line')
+    split_line = line.split(':')
     if len(split_line) < 2:
         raise BadLocalizationException('No semicolon found')
     key = split_line[0]

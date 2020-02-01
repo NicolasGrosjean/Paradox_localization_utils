@@ -23,7 +23,7 @@ class TestReadLocalizationFile(unittest.TestCase):
         self.assertEqual('value1:value2', get_key_value_and_version('key:0 "value1:value2" #comment')[1])
         self.assertEqual('value1:value2', get_key_value_and_version('key:0 "value1:value2" #comment')[1])
         self.assertEqual('value1:value2', get_key_value_and_version('key:0 "value1:value2" #comment:a')[1])
-        self.assertEqual('value1:value2', get_key_value_and_version('key:0 "value1:value2" #comment"a')[1])
+        self.assertEqual('value1:value2 #!', get_key_value_and_version('key:0 "value1:value2 #!"')[1])
         self.assertEqual(42, get_key_value_and_version('key:42 "value"')[2])
         try:
             get_key_value_and_version('')
@@ -39,17 +39,12 @@ class TestReadLocalizationFile(unittest.TestCase):
             get_key_value_and_version('#')
             self.fail()
         except BadLocalizationException as e:
-            self.assertEqual('No semicolon found', str(e))
-        try:
-            get_key_value_and_version('##')
-            self.fail()
-        except BadLocalizationException as e:
-            self.assertEqual('No semicolon found', str(e))
+            self.assertEqual('Comment line', str(e))
         try:
             get_key_value_and_version('#Comment:a')
             self.fail()
         except BadLocalizationException as e:
-            self.assertEqual('No semicolon found', str(e))
+            self.assertEqual('Comment line', str(e))
 
     def test_file_to_keys_and_values(self):
         absolute_file_path = os.path.abspath(os.path.join('data', 'test.yml'))
