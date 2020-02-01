@@ -44,15 +44,17 @@ def add_missing_line(source_file_path, dest_file_path, old_lines_file_path):
 
 if __name__ == '__main__':
     args = get_args()
-    name_to_dest_path = dict()
+    rel_to_dest_abs_path = dict()
     for root, _, files in os.walk(args.dest_dir):
         for file in files:
-            name_to_dest_path[file[:file.find('_l_')]] = os.path.abspath(os.path.join(root, file))
+            abs_path = os.path.abspath(os.path.join(root, file))
+            rel_to_dest_abs_path[abs_path[:abs_path.find('_l_')].replace(args.dest_dir, '')] = abs_path
     for root, _, files in os.walk(args.source_dir):
         for file in files:
-            name = file[:file.find('_l_')]
-            if name not in name_to_dest_path:
-                print(f'File {name} doesn\'t exists for destination language')
+            abs_path = os.path.abspath(os.path.join(root, file))
+            rel_path = abs_path[:abs_path.find('_l_')].replace(args.source_dir, '')
+            if rel_path not in rel_to_dest_abs_path:
+                print(f'File {rel_path} doesn\'t exists for destination language')
             else:
-                add_missing_line(os.path.abspath(os.path.join(root, file)), name_to_dest_path[name],
+                add_missing_line(abs_path, rel_to_dest_abs_path[rel_path],
                                  os.path.abspath(os.path.join(args.dest_dir, '..', 'old_lines.yml')))
