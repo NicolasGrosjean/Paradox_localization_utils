@@ -17,9 +17,28 @@ def file_to_keys_and_values(absolute_file_path):
     return res, lines[0]
 
 
+def file_to_keys_and_lines(absolute_file_path):
+    """
+    Extract key and lines from a Paradox localization file
+    :param absolute_file_path: Absolute file path of a Paradox localization file
+    :return: (Dict with localization keys as keys and lines as values, first line of the file)
+    """
+    with open(absolute_file_path, 'r', encoding='utf8') as f:
+        lines = f.readlines()
+    res = dict()
+    for i in range(1, len(lines)):
+        try:
+            key = get_key(lines[i])
+            res[key] = lines[i]
+        except BadLocalizationException as e:
+            if str(e) == 'Missing double quote' and i > 0:
+                print(f'Missing double quote in file {absolute_file_path} line {i} : {lines[i]}')
+    return res, lines[0]
+
+
 def get_key_value_and_version(line):
     """
-    Extract the key and value of a string representing the line of a Paradox localization file
+    Extract the key, the value and the version of a string representing the line of a Paradox localization file
     :param line: string representing the line of a Paradox localization file
     :return: (localization key, value corresponding to the localization key, version of the value)
     """
@@ -55,6 +74,27 @@ def get_key_value_and_version(line):
         raise BadLocalizationException('Missing double quote')
     text = text[start:end]
     return key, text, version
+
+
+def get_key(line):
+    """
+    Extract the key of a string representing the line of a Paradox localization file
+    :param line: string representing the line of a Paradox localization file
+    :return: (localization key, value corresponding to the localization key, version of the value)
+    """
+    i = 0
+    while i < len(line) and line[i] == ' ':
+        i += 1
+    if i < len(line) and line[i] == '#':
+        raise BadLocalizationException('Comment line')
+    split_line = line.split(':')
+    if len(split_line) < 2:
+        raise BadLocalizationException('No semicolon found')
+    key = split_line[0]
+    i = 0
+    while key[i] == ' ':
+        i += 1
+    return key[i:]
 
 
 class BadLocalizationException(Exception):
