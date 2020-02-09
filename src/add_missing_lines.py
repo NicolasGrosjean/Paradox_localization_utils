@@ -33,7 +33,7 @@ def add_missing_line(source_file_path, dest_file_path, old_lines_file_path):
                     f.write(dest_texts[key])
                     del dest_texts[key]
                 else:
-                    dest_version = '' if version is None else str(version)
+                    dest_version = '0Z' if version is None else str(version) + 'Z'
                     f.write(' ' + key + ':' + str(dest_version) + ' "' + value + '"\n')
     with open(old_lines_file_path, 'a', encoding='utf8') as f:
         for dest_line in dest_texts.values():
