@@ -20,7 +20,9 @@ activate paradox_loc
 
 ## Usage
 
-### Add missing lines for Imperator Rome and sooner
+### Add missing lines
+
+#### For Imperator Rome and sooner
 ```
 python src/add_missing_lines.py <source_dir> <dest_dir>
 ```
@@ -29,6 +31,17 @@ Example to add in French files missing lines from English files
 ```
 python src/add_missing_lines.py "<...>\game\localization\english" "<...>\game\localization\french"
 ```
+
+#### For EUIV, HoI4 or Stellaris
+```
+python src/add_missing_lines.py <localisation_dir> <localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang>
+```
+
+Example to add in French files missing lines from English files
+```
+python src/add_missing_lines.py "<...>\localisation" "<...>\localisation" -source_lang english -dest_lang french
+```
+
 
 ### Apply diff for EUIV and sooner
 ```
