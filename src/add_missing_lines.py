@@ -15,9 +15,7 @@ def get_args():
     return parser.parse_args()
 
 
-def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_path):
-    dest_texts, dest_first_line = file_to_keys_and_lines(dest_file_path)
-
+def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_path, dest_texts, dest_first_line):
     with open(source_file_path, 'r', encoding='utf8') as f:
         source_lines = f.readlines()
 
@@ -74,21 +72,28 @@ def add_missing_lines_eu_hoi_stellaris(source_dir, source_lang, dest_lang):
     :return:
     """
     rel_to_dest_abs_path = dict()
+    dest_texts = dict()
     for root, _, files in os.walk(source_dir):
         for file in files:
             if file.endswith(dest_lang + '.yml'):
                 abs_path = os.path.abspath(os.path.join(root, file))
                 rel_to_dest_abs_path[abs_path[:abs_path.find('_l_')].replace(source_dir, '')] = abs_path
+                file_dest_texts, _ = file_to_keys_and_lines(abs_path)
+                os.remove(abs_path)
+                dest_texts = {**dest_texts, **file_dest_texts}
     for root, _, files in os.walk(source_dir):
         for file in files:
             if file.endswith(source_lang + '.yml'):
                 abs_path = os.path.abspath(os.path.join(root, file))
                 rel_path = abs_path[:abs_path.find('_l_')].replace(source_dir, '')
-                if rel_path not in rel_to_dest_abs_path:
-                    print(f'File {rel_path} doesn\'t exists for destination language')
+                if rel_path in rel_to_dest_abs_path:
+                    dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
-                    add_missing_lines_one_file(abs_path, rel_to_dest_abs_path[rel_path],
-                                              os.path.abspath(os.path.join(source_dir, '..', 'old_lines.yml')))
+                    dest_file_path = abs_path.replace(source_lang + '.yml', dest_lang + '.yml')
+                add_missing_lines_one_file(abs_path, dest_file_path,
+                                           os.path.abspath(os.path.join(source_dir, '..', 'old_lines.yml')),
+                                           dest_texts, '\ufeffl_' + dest_lang + ':\n')
+
 
 if __name__ == '__main__':
     args = get_args()
