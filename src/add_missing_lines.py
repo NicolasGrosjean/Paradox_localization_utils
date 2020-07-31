@@ -29,7 +29,7 @@ def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_
                 except BadLocalizationException:
                     f.write(source_lines[i])
                     continue
-                if key in dest_texts:
+                if key in dest_texts and (dest_texts[key] != '' or value == ''):
                     f.write(dest_texts[key])
                     del dest_texts[key]
                 else:
