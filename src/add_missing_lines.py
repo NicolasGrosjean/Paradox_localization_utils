@@ -35,9 +35,10 @@ def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_
                 else:
                     dest_version = '' if version is None else str(version)
                     f.write(' ' + key + ':' + str(dest_version) + ' "' + value + '"\n')
-    with open(old_lines_file_path, 'a', encoding='utf8') as f:
-        for dest_line in dest_texts.values():
-            f.write(dest_line)
+    if old_lines_file_path is not None:
+        with open(old_lines_file_path, 'a', encoding='utf8') as f:
+            for dest_line in dest_texts.values():
+                f.write(dest_line)
 
 
 def add_missing_lines_imperator(source_dir, dest_dir):
@@ -90,9 +91,7 @@ def add_missing_lines_eu_hoi_stellaris(source_dir, source_lang, dest_lang):
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
                     dest_file_path = abs_path.replace(source_lang + '.yml', dest_lang + '.yml')
-                add_missing_lines_one_file(abs_path, dest_file_path,
-                                           os.path.abspath(os.path.join(source_dir, '..', 'old_lines.yml')),
-                                           dest_texts, '\ufeffl_' + dest_lang + ':\n')
+                add_missing_lines_one_file(abs_path, dest_file_path, None, dest_texts, '\ufeffl_' + dest_lang + ':\n')
 
 
 if __name__ == '__main__':
