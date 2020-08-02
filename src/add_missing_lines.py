@@ -36,7 +36,8 @@ def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_
                     continue
                 if key in dest_texts and (dest_texts[key] != '' or value == ''):
                     f.write(dest_texts[key])
-                    del dest_texts[key]
+                    if old_lines_file_path is not None:
+                        del dest_texts[key]
                 else:
                     dest_version = '' if version is None else str(version)
                     f.write(' ' + key + ':' + str(dest_version) + ' "' + value + '"\n')
