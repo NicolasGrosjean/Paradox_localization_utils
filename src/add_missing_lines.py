@@ -22,7 +22,12 @@ def add_missing_lines_one_file(source_file_path, dest_file_path, old_lines_file_
     with open(dest_file_path, 'w', encoding='utf8') as f:
         for i in range(len(source_lines)):
             if i == 0:
-                f.write(dest_first_line)
+                if len(source_lines) == 1:
+                    # Manage empty source file
+                    f.write(source_lines[i])
+                else:
+                    # Add the language description
+                    f.write(dest_first_line)
             else:
                 try:
                     key, value, version = get_key_value_and_version(source_lines[i])
