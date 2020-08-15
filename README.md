@@ -18,6 +18,15 @@ Activate the conda environment
 activate paradox_loc
 ```
 
+Install Levenshtein package (only need for *apply_diff_all*)
+```
+conda install python-levenshtein==0.12.0
+```
+OR
+```
+pip install python-levenshtein==0.12.0
+```
+
 ## Usage
 
 ### Add missing lines
@@ -43,7 +52,29 @@ python src/add_missing_lines.py "<...>\localisation" "<...>\localisation" -sourc
 ```
 
 
-### Apply diff for EUIV and sooner
+### Apply diff all
+
+#### For Imperator Rome and sooner
+Not yet implemented
+
+#### For EUIV, HoI4 or Stellaris
+```
+python src/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> <current_localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang>
+```
+
+Example to add in French files missing lines from English files
+```
+python src/apply_diff_all.py "<...>\V1\localisation" "<...>\V2\localisation" "<...>\V2\localisation" -source_lang english -dest_lang french
+```
+
+The destination file is override so don't hesitate to have a backup before running this.
+
+The new and edited lines contains `:9 "`.
+
+If there is less than 10 modifications (according Levenshtein distance),
+the destination text is kept.
+ 
+### [DEPRECATED] Apply diff for EUIV and sooner
 ```
 python src/apply_diff.py <old_source_file> <new_source_file> <dest_file>
 ```
