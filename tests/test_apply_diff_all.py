@@ -80,3 +80,13 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[3].replace('\n', ''), '  ')
         self.assertEqual(lines[4].replace('\n', ''), '  # Events')
         self.assertEqual(lines[5].replace('\n', ''), '  KEY61:2 "valeur1"')
+
+    def test_apply_diff_non_translated_file(self):
+        with open(os.path.abspath(os.path.join(self.data_dir, 'new', '7_l_french.yml')), 'r', encoding='utf8') as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace('\n', ''), '\ufeffl_french:')
+        self.assertEqual(lines[1].replace('\n', ''), '  # Ideas')
+        self.assertEqual(lines[2].replace('\n', ''), ' KEY70:9 "value14"')
+        self.assertEqual(lines[3].replace('\n', ''), '  ')
+        self.assertEqual(lines[4].replace('\n', ''), '  # Events')
+        self.assertEqual(lines[5].replace('\n', ''), '  KEY71:2 "value1"')
