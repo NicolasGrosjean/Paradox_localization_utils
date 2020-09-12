@@ -103,4 +103,6 @@ if __name__ == '__main__':
     if (args.source_lang is None) and (args.dir_lang is None):
         print('Not yet implemented!')
     else:
-        apply_diff_all_eu_hoi_stellaris(args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang)
+        answer = input(f'Do want apply diff with {args.old_source_dir} as old source directory ? [y/N]')
+        if answer.lower() == 'y':
+            apply_diff_all_eu_hoi_stellaris(args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang)
