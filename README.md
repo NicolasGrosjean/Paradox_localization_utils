@@ -18,13 +18,18 @@ Activate the conda environment
 activate paradox_loc
 ```
 
-Install Levenshtein package (only need for *apply_diff_all*)
+Install Levenshtein package (only needed for *apply_diff_all*)
 ```
 conda install python-levenshtein==0.12.0
 ```
 OR
 ```
 pip install python-levenshtein==0.12.0
+```
+
+Install pandas package (only needed for *extract_existing_translation*)
+```
+pip install pandas
 ```
 
 ## Usage
@@ -73,6 +78,22 @@ The new and edited lines contains `:9 "`.
 
 If there is less than 10 modifications (according Levenshtein distance),
 the destination text is kept.
+
+### Extract existing translation
+
+#### Limits
+For the moment the extraction is source is Ck2 or Victoria 2,
+and the target is EUIV or sooner.
+
+#### Usage
+ ```
+python src/extract_existing_translation.py <extract_source_dir> <extract_dest_dir> <target_source_dir> <target_dest_dir> <source_lang> <dest_lang> -source_col_ck2 <source_col_ck2> -dest_col_ck2 <dest_col_ck2>
+```
+
+Example to add in French files missing lines from English files
+```
+python src/extract_existing_translation.py "<...>\CK2\localisation" "<...>\CK2\localisation" "<...>\CK3\localization\english" "<...>\CK3\localization\french" english french -source_col_ck2 1 -dest_col_ck2 2
+```
  
 ### [DEPRECATED] Apply diff for EUIV and sooner
 ```
