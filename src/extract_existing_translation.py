@@ -32,7 +32,11 @@ def extract_translation_from_CK2_file(ck2_loc_file, extracted_translation, sourc
         for _, row in df.iterrows():
             extracted_translation[row[df.columns[source_col_ck2]]] = row[df.columns[dest_col_ck2]]
     except pd.errors.ParserError:
-        print(f'Parsing error when reading {ck2_loc_file}')
+        with open(ck2_loc_file, 'r', encoding='ISO-8859-1') as f:
+            lines = f.readlines()
+        for line in lines:
+            split = line.split(';')
+            extracted_translation[split[source_col_ck2]] = split[dest_col_ck2]
 
 
 def insert_text(file_path, extracted_translation, target_source_files):
