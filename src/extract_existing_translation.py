@@ -39,6 +39,21 @@ def extract_translation_from_CK2_file(ck2_loc_file, extracted_translation, sourc
             extracted_translation[split[source_col_ck2]] = split[dest_col_ck2]
 
 
+def extract_translation_from_yml_file(source_loc_file, dest_loc_file, extracted_translation):
+    """
+    Add {source_text: dest_text} to extracted_translation dict
+    :param source_loc_file: Path of YML source file
+    :param dest_loc_file: Path of YML destination file
+    :param extracted_translation: Dictionary which will be completed
+    :return:
+    """
+    source_texts, _ = file_to_keys_and_values(source_loc_file)
+    dest_texts, _ = file_to_keys_and_values(dest_loc_file)
+    for source_key in source_texts.keys():
+        if source_key in dest_texts.keys():
+            extracted_translation[source_texts[source_key]['value']] = dest_texts[source_key]['value']
+
+
 def insert_text(file_path, extracted_translation, target_source_files):
     """
     Modify localisation yml file be inserting extracted translation (key -> source_text -> extracted_dest_text)
@@ -79,30 +94,30 @@ def extract_existing_translation(extract_source_dir, extract_dest_dir, target_so
             if file.endswith('.csv'):
                 extract_translation_from_CK2_file(os.path.join(extract_source_dir, file), extracted_translation,
                                                   source_col_ck2, dest_col_ck2)
-            elif file.endswith('.yml'):
-                print(f'Management of {file} not yet implemented!')
+            elif file.endswith(source_lang + '.yml'):
+                extract_translation_from_yml_file(os.path.join(extract_source_dir, file),
+                                                  os.path.join(extract_dest_dir, file.replace(source_lang, dest_lang)),
+                                                  extracted_translation)
+            else:
+                print(f'{file} not managed !')
 
     # Store target source text {key: source_text}
     target_source_files = dict()
     for root, _, files in os.walk(target_source_dir):
         for file in files:
             if file.endswith(source_lang + '.yml'):
-                target_source_file, _ = file_to_keys_and_values(os.path.join(target_source_dir, file))
+                target_source_file, _ = file_to_keys_and_values(os.path.join(root, file))
                 target_source_files = {**target_source_files, **target_source_file}
 
     # Insert text in destination target file
     for root, _, files in os.walk(target_dest_dir):
         for file in files:
             if file.endswith(dest_lang + '.yml'):
-                insert_text(os.path.join(target_dest_dir, file), extracted_translation, target_source_files)
+                insert_text(os.path.join(root, file), extracted_translation, target_source_files)
 
 
 if __name__ == '__main__':
     args = get_args()
-    if (args.source_col_ck2 is None) or (args.dest_col_ck2 is None):
-        print('Not yet implemented!')
-    else:
-        extract_existing_translation(args.extract_source_dir, args.extract_dest_dir, args.target_source_dir,
-                                     args.target_dest_dir, args.source_lang, args.dest_lang, args.source_col_ck2,
-                                     args.dest_col_ck2)
-
+    extract_existing_translation(args.extract_source_dir, args.extract_dest_dir, args.target_source_dir,
+                                 args.target_dest_dir, args.source_lang, args.dest_lang, args.source_col_ck2,
+                                 args.dest_col_ck2)

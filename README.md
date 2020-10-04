@@ -82,17 +82,21 @@ the destination text is kept.
 ### Extract existing translation
 
 #### Limits
-For the moment the extraction is source is Ck2 or Victoria 2,
-and the target is EUIV or sooner.
+The target is EUIV or sooner whereas the souce can be CK2/Vic2 or EUIV and sooner.
 
 #### Usage
  ```
 python src/extract_existing_translation.py <extract_source_dir> <extract_dest_dir> <target_source_dir> <target_dest_dir> <source_lang> <dest_lang> -source_col_ck2 <source_col_ck2> -dest_col_ck2 <dest_col_ck2>
 ```
 
-Example to add in French files missing lines from English files
+Example to add in French CK3 files some texts from CK2 files.
 ```
 python src/extract_existing_translation.py "<...>\CK2\localisation" "<...>\CK2\localisation" "<...>\CK3\localization\english" "<...>\CK3\localization\french" english french -source_col_ck2 1 -dest_col_ck2 2
+```
+
+Example to add in French HoI IV mod files some texts from Vanilla files.
+```
+python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\mod\localisation" "<...>\mod\localisation" english french
 ```
  
 ### [DEPRECATED] Apply diff for EUIV and sooner
