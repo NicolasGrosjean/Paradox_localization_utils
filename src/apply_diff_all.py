@@ -41,7 +41,10 @@ def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, des
                     # The source has changed enough to replace destination by current source text
                     f.write(' ' + key + ':9 "' + value + '"\n')
                 elif key in dest_texts and (dest_texts[key] != '' or value == ''):
-                    _, dest_text, _ = get_key_value_and_version(dest_texts[key])
+                    try:
+                        _, dest_text, _ = get_key_value_and_version(dest_texts[key])
+                    except BadLocalizationException:
+                        dest_text = ''
                     if key in old_source_values and Levenshtein.distance(old_source_values[key]['value'], value) > 0:
                         if dest_text != old_source_values[key]['value']:
                             # The source has little changed and has been translated, we keep translation but change version number
