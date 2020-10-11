@@ -34,6 +34,17 @@ pip install pandas
 
 ## Usage
 
+### Update source
+
+```
+python src/update_source.py <source_dir> <target_dir> <source_lang>
+```
+
+Example to update the English files of the HoI4 mod Kaiserreich
+```
+python src/update_source.py <...>\Steam\steamapps\workshop\content\394360\1521695605 <...>\GitHub\Traduction-FR-Kaiserreich\Traduction-FR-Kaiserreich english
+```
+
 ### Add missing lines
 
 #### For Imperator Rome and sooner
