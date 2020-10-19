@@ -49,9 +49,11 @@ def main(args):
     for file in list_file_to_copy(args.target_dir):
         dest = file.replace(args.target_dir, copied_mod_dir)
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        shutil.copyfile(file, dest)
+        source = file.replace(args.target_dir, args.source_dir)
+        if os.path.exists(source):
+            shutil.copyfile(source, dest)
 
-    # Remove old source files
+    # Remove old source localisation files in target_dir
     i = 0
     for root, _, files in os.walk(get_localisation_dir(args.target_dir, args.source_lang)):
         for file in files:
