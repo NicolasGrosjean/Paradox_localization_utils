@@ -96,7 +96,7 @@ the destination text is kept.
 The target is EUIV or sooner whereas the souce can be CK2/Vic2 or EUIV and sooner.
 
 #### Usage
- ```
+```
 python src/extract_existing_translation.py <extract_source_dir> <extract_dest_dir> <target_source_dir> <target_dest_dir> <source_lang> <dest_lang> -source_col_ck2 <source_col_ck2> -dest_col_ck2 <dest_col_ck2>
 ```
 
@@ -108,6 +108,21 @@ python src/extract_existing_translation.py "<...>\CK2\localisation" "<...>\CK2\l
 Example to add in French HoI IV mod files some texts from Vanilla files.
 ```
 python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\mod\localisation" "<...>\mod\localisation" english french
+```
+
+### Extract existing translation
+
+#### Limits
+It works only for Imperator Rome and sooner.
+
+#### Usage
+ ```
+python src/copy_on_other_languages.py <localization_dir> <source_lang> <dest_lang1> <dest_lang2> ... 
+```
+
+Example to add some languages to available only in English and French (the added languages will have English text). 
+```
+python src/copy_on_other_languages.py "<...>\MyMod\localisation" english korean german russian simp_chinese spanish
 ```
  
 ### [DEPRECATED] Apply diff for EUIV and sooner

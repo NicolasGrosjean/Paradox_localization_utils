@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from src.extract_existing_translation import extract_existing_translation
 
 
-class TestApplyDiff(unittest.TestCase):
+class TestExtractExistingTranslation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data_dir = os.path.join('data', 'extract_existing_translation')
