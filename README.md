@@ -110,7 +110,7 @@ Example to add in French HoI IV mod files some texts from Vanilla files.
 python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\mod\localisation" "<...>\mod\localisation" english french
 ```
 
-### Extract existing translation
+### Copy localization in other languages
 
 #### Limits
 It works only for Imperator Rome and sooner.
