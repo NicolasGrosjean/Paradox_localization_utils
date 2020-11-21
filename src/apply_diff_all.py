@@ -27,7 +27,7 @@ def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, des
             if i == 0:
                 if len(source_lines) == 1:
                     # Manage empty source file
-                    f.write(source_lines[i])
+                    f.write('')
                 else:
                     # Add the language description
                     f.write(dest_first_line)

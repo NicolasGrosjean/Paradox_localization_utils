@@ -57,14 +57,15 @@ def get_key_value_and_version(line):
     key = key[i:]
     text = split_line[1]
     version = None
-    i = 0
-    while text[i].isdigit():
-        if version is None:
-            version = int(text[i])
-        else:
-            version = 10 * version + int(text[i])
-        i += 1
-    text = text[i:]
+    if len(text) > 0:
+        i = 0
+        while text[i].isdigit():
+            if version is None:
+                version = int(text[i])
+            else:
+                version = 10 * version + int(text[i])
+            i += 1
+        text = text[i:]
     if len(split_line) > 2:
         for i in range(2, len(split_line)):
             text += ':' + split_line[i]

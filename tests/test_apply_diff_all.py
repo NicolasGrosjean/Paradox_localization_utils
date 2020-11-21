@@ -112,5 +112,4 @@ class TestApplyDiffAll(unittest.TestCase):
     def test_apply_diff_bug_no_change(self):
         with open(os.path.abspath(os.path.join(self.data_dir, 'new', '9_l_french.yml')), 'r', encoding='utf8') as f:
             lines = f.readlines()
-        self.assertEqual(lines[0].replace('\n', ''), '\ufeffl_french:')
-        self.assertEqual(lines[29].replace('\n', ''), ' twosun_missile:9 "Les Laboratoires de Missiles"')
+        self.assertEqual(0, len(lines))
