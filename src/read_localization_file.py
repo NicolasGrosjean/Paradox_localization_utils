@@ -52,7 +52,7 @@ def get_key_value_and_version(line):
         raise BadLocalizationException('No semicolon found')
     key = split_line[0]
     i = 0
-    while key[i] == ' ':
+    while key[i] == ' ' or key[i] == '\t':
         i += 1
     key = key[i:]
     text = split_line[1]
@@ -92,7 +92,7 @@ def get_key(line):
         raise BadLocalizationException('No semicolon found')
     key = split_line[0]
     i = 0
-    while key[i] == ' ':
+    while key[i] == ' ' or key[i] == '\t':
         i += 1
     return key[i:]
 

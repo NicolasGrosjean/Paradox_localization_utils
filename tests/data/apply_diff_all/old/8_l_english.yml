@@ -1,0 +1,3 @@
+﻿l_english:
+  game_rule_decisions: "Game Rule Decisions"
+	early_tagswitch_decision: "Play as [From.GetNameDef]"
