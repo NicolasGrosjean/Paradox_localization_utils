@@ -11,6 +11,11 @@ from src.apply_diff_all import apply_diff_all_eu_hoi_stellaris
 class TestApplyDiffAll(unittest.TestCase):
     """
     Run apply_diff_all in setUpClass, the tests are only the assert
+
+    Data directory setup:
+    data/apply_diff_all/dest : backup of old French files which are copied to data/apply_diff_all/new before tests
+    data/apply_diff_all/old : old English files
+    data/apply_diff_all/new : new English files and to update French files
     """
     @classmethod
     def setUpClass(cls):
@@ -19,6 +24,12 @@ class TestApplyDiffAll(unittest.TestCase):
             shutil.copyfile(os.path.join(cls.data_dir, 'dest', file), os.path.join(cls.data_dir, 'new', file))
         apply_diff_all_eu_hoi_stellaris(os.path.join(cls.data_dir, 'old'), os.path.join(cls.data_dir, 'new'),
                                         'english', 'french')
+
+    @classmethod
+    def tearDownClass(cls):
+        for file in os.listdir(os.path.join(cls.data_dir, 'new')):
+            if file.endswith('l_french.yml'):
+                os.remove(os.path.join(cls.data_dir, 'new', file))
 
     def test_apply_diff_same_sources(self):
         with open(os.path.abspath(os.path.join(self.data_dir, 'new', '0_l_french.yml')), 'r', encoding='utf8') as f:
