@@ -8,11 +8,10 @@ from src.extract_existing_translation import extract_existing_translation
 
 
 class TestExtractExistingTranslation(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.data_dir = os.path.join('data', 'extract_existing_translation')
-        for file in os.listdir(os.path.join(cls.data_dir, 'original')):
-            shutil.copyfile(os.path.join(cls.data_dir, 'original', file), os.path.join(cls.data_dir, 'target', file))
+    def setUp(self):
+        self.data_dir = os.path.join('data', 'extract_existing_translation')
+        for file in os.listdir(os.path.join(self.data_dir, 'original')):
+            shutil.copyfile(os.path.join(self.data_dir, 'original', file), os.path.join(self.data_dir, 'target', file))
 
     def test_extract_existing_ck2_translations(self):
         extract_existing_translation(os.path.join(self.data_dir, 'ck2'), os.path.join(self.data_dir, 'ck2'),
