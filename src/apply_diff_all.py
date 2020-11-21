@@ -18,24 +18,32 @@ def get_args():
     return parser.parse_args()
 
 
-def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, dest_texts, dest_first_line):
+def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, dest_texts, dest_lang_line,
+                        source_lang_line):
     with open(source_file_path, 'r', encoding='utf8') as f:
         source_lines = f.readlines()
 
     with open(dest_file_path, 'w', encoding='utf8') as f:
-        for i in range(len(source_lines)):
-            if i == 0:
-                if len(source_lines) == 1:
-                    # Manage empty source file
-                    f.write('')
+        source_lang_line_seen = False
+        first_line = True
+        for source_line in source_lines:
+            if not source_lang_line_seen:
+                if source_line.replace('\ufeff', '').replace('\n', '') !=\
+                        source_lang_line.replace('\ufeff', '').replace('\n', ''):
+                    # Copy source header
+                    f.write(source_line)
                 else:
                     # Add the language description
-                    f.write(dest_first_line)
+                    if first_line:
+                        f.write(dest_lang_line)
+                    else:
+                        f.write(dest_lang_line[1:])
+                    source_lang_line_seen = True
             else:
                 try:
-                    key, value, version = get_key_value_and_version(source_lines[i])
+                    key, value, version = get_key_value_and_version(source_line)
                 except BadLocalizationException:
-                    f.write(source_lines[i])
+                    f.write(source_line)
                     continue
                 if key in old_source_values and Levenshtein.distance(old_source_values[key]['value'], value) >= 10:
                     # The source has changed enough to replace destination by current source text
@@ -58,6 +66,7 @@ def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, des
                 else:
                     # Add current source text
                     f.write(' ' + key + ':9 "' + value + '"\n')
+            first_line = False
 
 
 def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang):
@@ -98,7 +107,8 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
                     dest_file_path = abs_path.replace(source_lang + '.yml', dest_lang + '.yml')
-                apply_diff_one_file(abs_path, dest_file_path, old_source_values, dest_texts, '\ufeffl_' + dest_lang + ':\n')
+                apply_diff_one_file(abs_path, dest_file_path, old_source_values, dest_texts,
+                                    '\ufeffl_' + dest_lang + ':\n', '\ufeffl_' + source_lang + ':\n')
 
 
 if __name__ == '__main__':

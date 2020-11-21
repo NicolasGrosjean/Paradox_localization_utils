@@ -109,7 +109,14 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[1].replace('\n', ''), ' game_rule_decisions:0 "Décisions de règles de jeu"')
         self.assertEqual(lines[2].replace('\n', ''), ' early_tagswitch_decision:0 "Jouer en tant que [From.GetNameDef]"')
 
-    def test_apply_diff_bug_no_change(self):
+    def test_apply_diff_file_one_line(self):
         with open(os.path.abspath(os.path.join(self.data_dir, 'new', '9_l_french.yml')), 'r', encoding='utf8') as f:
             lines = f.readlines()
-        self.assertEqual(0, len(lines))
+            self.assertEqual(lines[0].replace('\n', ''), '\ufeffl_french:')
+
+    def test_apply_diff_comment_first(self):
+        with open(os.path.abspath(os.path.join(self.data_dir, 'new', '10_l_french.yml')), 'r', encoding='utf8') as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace('\n', ''), '\ufeff######################################')
+        self.assertEqual(lines[13].replace('\n', ''), 'l_french:')
+        self.assertEqual(lines[14].replace('\n', ''), '  dislikes_big_mt:0 "N\'aime pas le Big MT"')
