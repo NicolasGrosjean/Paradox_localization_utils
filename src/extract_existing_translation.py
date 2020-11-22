@@ -74,7 +74,8 @@ def insert_text(file_path, extracted_translation, target_source_files):
                 try:
                     key, value, version = get_key_value_and_version(lines[i])
                     if key not in target_source_files:
-                        raise Exception('Apply diff before this script')
+                        raise Exception(f'{key} not in the source file corresponding to {file_path}.\n' +
+                                        'Apply diff before this script')
                     target_source_text = target_source_files[key]['value']
                     if target_source_text in extracted_translation:
                         f.write(' ' + key + ':0 "' + extracted_translation[target_source_text] + '"\n')
