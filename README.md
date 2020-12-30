@@ -115,7 +115,10 @@ python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts 
 #### Limits
 It works only for Imperator Rome and sooner.
 
-#### Usage
+#### Basic Usage [Windows only]
+The usage is explicated in this [Steam guide](https://steamcommunity.com/sharedfiles/filedetails/?id=2342385980).
+
+#### Developer Usage
  ```
 python src/copy_on_other_languages.py <localization_dir> <source_lang> <dest_lang1> <dest_lang2> ... 
 ```
@@ -124,6 +127,12 @@ Example to add some languages to available only in English and French (the added
 ```
 python src/copy_on_other_languages.py "<...>\MyMod\localisation" english korean german russian simp_chinese spanish
 ```
+
+To compile it (after running once `pip install cx_Freeze`), use the following command
+```
+cxfreeze -c src/copy_on_other_languages.py
+```
+
  
 ### [DEPRECATED] Apply diff for EUIV and sooner
 ```
