@@ -24,8 +24,9 @@ def copy_on_other_languages(localisation_dir, source_lang, dest_langs):
             for file in files:
                 with open(os.path.join(root, file), 'r') as f:
                     lines = f.readlines()
-                with open(os.path.join(root, file.replace(f'{source_lang}.yml', f'{dest_lang}.yml')), 'w') as f:
-                    f.write(f'l_{dest_lang}:\n')
+                with open(os.path.join(root, file.replace(f'{source_lang}.yml', f'{dest_lang}.yml')), 'w',
+                          encoding='utf-8') as f:
+                    f.write(f'\ufeffl_{dest_lang}:\n')
                     for i in range(1, len(lines)):
                         f.write(lines[i])
                 os.remove(os.path.join(root, file))
