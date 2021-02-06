@@ -16,18 +16,19 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     keys_to_values = dict()
-    for file in os.listdir(args.directory):
-        if file.endswith('l_english.yml'):
-            with open(os.path.join(args.directory, file), 'r', encoding='utf8') as f:
-                lines = f.readlines()
-            for line in lines:
-                try:
-                    key, value, _ = get_key_value_and_version(line)
-                    if 'l_english' in key or 'spellcheck_ignore' in key:
-                        continue
-                    if key in keys_to_values and (not args.only_different_value or\
-                                                  keys_to_values[key] != value):
-                        print(f'{key} is duplicated. Found at least once in {file}')
-                    keys_to_values[key] = value
-                except BadLocalizationException:
-                    pass
+    for root, _, files in os.walk(args.directory):
+        for file in files:
+            if file.endswith('l_english.yml'):
+                with open(os.path.join(root, file), 'r', encoding='utf8') as f:
+                    lines = f.readlines()
+                for line in lines:
+                    try:
+                        key, value, _ = get_key_value_and_version(line)
+                        if 'l_english' in key or 'spellcheck_ignore' in key:
+                            continue
+                        if key in keys_to_values and (not args.only_different_value or\
+                                                      keys_to_values[key] != value):
+                            print(f'{key} is duplicated. Found at least once in {file}')
+                        keys_to_values[key] = value
+                    except BadLocalizationException:
+                        pass
