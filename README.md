@@ -93,7 +93,7 @@ the destination text is kept.
 ### Extract existing translation
 
 #### Limits
-The target is EUIV or sooner whereas the souce can be CK2/Vic2 or EUIV and sooner.
+The target is EUIV or sooner whereas the source can be CK2/Vic2 or EUIV and sooner.
 
 #### Usage
 ```
@@ -108,6 +108,23 @@ python src/extract_existing_translation.py "<...>\CK2\localisation" "<...>\CK2\l
 Example to add in French HoI IV mod files some texts from Vanilla files.
 ```
 python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\Steam\steamapps\common\Hearts of Iron IV\localisation" "<...>\mod\localisation" "<...>\mod\localisation" english french
+```
+
+### Extract Paratranz translation
+
+Extract translations from JSON files downloaded from [Paratranz](https://paratranz.cn).
+
+#### Limits
+This script only works for EUIV and sooner.
+
+#### Usage
+```
+python src/extract_paratranz_translation.py <paratranz_dir> <localisation_dir> <language>
+```
+
+Example to extract french files
+```
+python src/extract_paratranz_translation.py "<...>\paratranz" "<...>\localisation" french
 ```
 
 ### Copy localization in other languages
