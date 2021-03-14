@@ -18,7 +18,8 @@ def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_p
         raw_paratranz_data = json.load(f)
     paratranz_data = dict()
     for line in raw_paratranz_data:
-        paratranz_data[line['key'].split(':')[0]] = line['translation']
+        if len(line['translation']) > 0:
+            paratranz_data[line['key'].split(':')[0]] = line['translation']
 
     with open(localisation_file_path, 'r', encoding='utf8') as f:
         lines = f.readlines()
