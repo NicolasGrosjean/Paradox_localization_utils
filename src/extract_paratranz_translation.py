@@ -10,15 +10,16 @@ def get_args():
     parser.add_argument('paratranz_dir', type=str, help='Directory with JSON Paratranz files')
     parser.add_argument('localisation_dir', type=str, help='Directory with Paradox files to edit')
     parser.add_argument('language', type=str, help='Language of the Paradox files to edit')
+    parser.add_argument('-extract_not_review', action='store_true', help='Extract not reviewed translation')
     return parser.parse_args()
 
 
-def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_path: str):
+def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_path: str, extract_not_review: bool):
     with open(paratranz_file_path, 'r', encoding='utf8') as f:
         raw_paratranz_data = json.load(f)
     paratranz_data = dict()
     for line in raw_paratranz_data:
-        if len(line['translation']) > 0:
+        if len(line['translation']) > 0 and (extract_not_review or line['stage'] == 5):
             paratranz_data[line['key'].split(':')[0]] = line['translation']
 
     with open(localisation_file_path, 'r', encoding='utf8') as f:
@@ -43,8 +44,12 @@ def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_p
 
 if __name__ == '__main__':
     args = get_args()
+    extract_not_review = args.extract_not_review
+    if extract_not_review is None:
+        extract_not_review = False
     for file in os.listdir(args.paratranz_dir):
         if file.endswith('.json'):
             loc_file_name = file[:file.index('_l_')] + '_l_' + args.language + '.yml'
             extract_paratranz_localisation(os.path.join(args.paratranz_dir, file),
-                                           os.path.join(args.localisation_dir, loc_file_name))
+                                           os.path.join(args.localisation_dir, loc_file_name),
+                                           extract_not_review)

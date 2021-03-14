@@ -122,9 +122,17 @@ This script only works for EUIV and sooner.
 python src/extract_paratranz_translation.py <paratranz_dir> <localisation_dir> <language>
 ```
 
-Example to extract french files
+Example to extract french reviewed translations
 ```
 python src/extract_paratranz_translation.py "<...>\paratranz" "<...>\localisation" french
+```
+
+By default it extracts only reviewed translation.
+If you want to extract not reviewed translation, add `-extract_not_review` to the command.
+
+Example to extract french translations (reviewed or not)
+```
+python src/extract_paratranz_translation.py "<...>\paratranz" "<...>\localisation" french -extract_not_review
 ```
 
 ### Copy localization in other languages
