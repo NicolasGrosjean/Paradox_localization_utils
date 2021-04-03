@@ -49,6 +49,9 @@ if __name__ == '__main__':
         extract_not_review = False
     for file in os.listdir(args.paratranz_dir):
         if file.endswith('.json'):
+            if '_l_' not in file:
+                print(f'_l_ not in {file}')
+                continue
             loc_file_name = file[:file.index('_l_')] + '_l_' + args.language + '.yml'
             extract_paratranz_localisation(os.path.join(args.paratranz_dir, file),
                                            os.path.join(args.localisation_dir, loc_file_name),
