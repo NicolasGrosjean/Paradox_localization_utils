@@ -93,11 +93,12 @@ def extract_existing_translation(extract_source_dir, extract_dest_dir, target_so
     for root, _, files in os.walk(extract_source_dir):
         for file in files:
             if file.endswith('.csv'):
-                extract_translation_from_CK2_file(os.path.join(extract_source_dir, file), extracted_translation,
+                extract_translation_from_CK2_file(os.path.join(root, file), extracted_translation,
                                                   source_col_ck2, dest_col_ck2)
             elif file.endswith(source_lang + '.yml'):
-                extract_translation_from_yml_file(os.path.join(extract_source_dir, file),
-                                                  os.path.join(extract_dest_dir, file.replace(source_lang, dest_lang)),
+                extract_translation_from_yml_file(os.path.join(root, file),
+                                                  os.path.join(root.replace(extract_source_dir, extract_dest_dir),
+                                                               file.replace(source_lang, dest_lang)),
                                                   extracted_translation)
             else:
                 print(f'{file} not managed !')
