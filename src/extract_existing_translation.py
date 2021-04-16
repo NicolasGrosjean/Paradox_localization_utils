@@ -50,7 +50,7 @@ def extract_translation_from_yml_file(source_loc_file, dest_loc_file, extracted_
     source_texts, _ = file_to_keys_and_values(source_loc_file)
     dest_texts, _ = file_to_keys_and_values(dest_loc_file)
     for source_key in source_texts.keys():
-        if source_key in dest_texts.keys():
+        if source_key in dest_texts.keys() and source_texts[source_key]['value'] != '':
             extracted_translation[source_texts[source_key]['value']] = dest_texts[source_key]['value']
 
 
