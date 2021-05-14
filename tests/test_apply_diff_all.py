@@ -60,7 +60,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace('\n', ''), '\ufeffl_french:')
         self.assertEqual(lines[1].replace('\n', ''), '  # Ideas')
-        self.assertEqual(lines[2].replace('\n', ''), ' KEY30:9 "value0"')
+        self.assertEqual(lines[2].replace('\n', ''), ' KEY30:9 "value of a new key"')
         self.assertEqual(lines[3].replace('\n', ''), '  ')
         self.assertEqual(lines[4].replace('\n', ''), '  # Events')
         self.assertEqual(lines[5].replace('\n', ''), '  KEY31:2 "valeur1"')
@@ -120,3 +120,13 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[0].replace('\n', ''), '\ufeff######################################')
         self.assertEqual(lines[13].replace('\n', ''), 'l_french:')
         self.assertEqual(lines[14].replace('\n', ''), '  dislikes_big_mt:0 "N\'aime pas le Big MT"')
+
+    def test_apply_diff_new_line_but_existing_translation(self):
+        with open(os.path.abspath(os.path.join(self.data_dir, 'new', '11_l_french.yml')), 'r', encoding='utf8') as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace('\n', ''), '\ufeffl_french:')
+        self.assertEqual(lines[1].replace('\n', ''), '  # Ideas')
+        self.assertEqual(lines[2].replace('\n', ''), ' New_translation:0 "Déjà traduit"')
+        self.assertEqual(lines[3].replace('\n', ''), '  ')
+        self.assertEqual(lines[4].replace('\n', ''), '  # Events')
+        self.assertEqual(lines[5].replace('\n', ''), '  Existing_translation:2 "Déjà traduit"')

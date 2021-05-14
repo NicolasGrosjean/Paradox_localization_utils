@@ -18,8 +18,15 @@ def get_args():
     return parser.parse_args()
 
 
+def write_new_line_or_get_existing_translation(f, key, value, existing_translations):
+    if value in existing_translations:
+        f.write(' ' + key + ':0 "' + existing_translations[value] + '"\n')
+    else:
+        f.write(' ' + key + ':9 "' + value + '"\n')
+
+
 def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, dest_texts, dest_lang_line,
-                        source_lang_line):
+                        source_lang_line, existing_translations):
     with open(source_file_path, 'r', encoding='utf8') as f:
         source_lines = f.readlines()
 
@@ -47,7 +54,8 @@ def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, des
                     continue
                 if key in old_source_values and Levenshtein.distance(old_source_values[key]['value'], value) >= 10:
                     # The source has changed enough to replace destination by current source text
-                    f.write(' ' + key + ':9 "' + value + '"\n')
+                    # OR translation if already translated elsewhere
+                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
                 elif key in dest_texts and (dest_texts[key] != '' or value == ''):
                     try:
                         _, dest_text, _ = get_key_value_and_version(dest_texts[key])
@@ -55,17 +63,21 @@ def apply_diff_one_file(source_file_path, dest_file_path, old_source_values, des
                         dest_text = ''
                     if key in old_source_values and Levenshtein.distance(old_source_values[key]['value'], value) > 0:
                         if dest_text != old_source_values[key]['value']:
-                            # The source has little changed and has been translated, we keep translation but change version number
-                            f.write(' ' + key + ':9 "' + dest_text + '"\n')
+                            # The source has little changed and has been translated,
+                            # we keep translation but change version number
+                            # OR translation if already translated elsewhere
+                            write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations)
                         else:
                             # Add current source text because the previous destination was not translated
-                            f.write(' ' + key + ':9 "' + value + '"\n')
+                            # OR translation if already translated elsewhere
+                            write_new_line_or_get_existing_translation(f, key, value, existing_translations)
                     else:
                         # Keep previous translation
                         f.write(dest_texts[key])
                 else:
                     # Add current source text
-                    f.write(' ' + key + ':9 "' + value + '"\n')
+                    # OR translation if already translated elsewhere
+                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
             first_line = False
 
 
@@ -89,14 +101,22 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
     # Store current dest texts and delete files
     rel_to_dest_abs_path = dict()
     dest_texts = dict()
+    dest_values = dict()
     for root, _, files in os.walk(current_dir):
         for file in files:
             if file.endswith(dest_lang + '.yml'):
                 abs_path = os.path.abspath(os.path.join(root, file))
                 rel_to_dest_abs_path[abs_path[:abs_path.find('_l_')].replace(current_dir, '')] = abs_path
                 file_dest_texts, _ = file_to_keys_and_lines(abs_path)
+                file_dest_values, _ = file_to_keys_and_values(abs_path)
                 os.remove(abs_path)
                 dest_texts = {**dest_texts, **file_dest_texts}
+                dest_values = {**dest_values, **file_dest_values}
+    # Map current translation
+    existing_translations = dict()
+    for source_key in old_source_values.keys():
+        if source_key in dest_values.keys() and old_source_values[source_key]['value'] != '':
+            existing_translations[old_source_values[source_key]['value']] = dest_values[source_key]['value']
     # Apply diff with current source texts
     for root, _, files in os.walk(current_dir):
         for file in files:
@@ -108,7 +128,8 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                 else:
                     dest_file_path = abs_path.replace(source_lang + '.yml', dest_lang + '.yml')
                 apply_diff_one_file(abs_path, dest_file_path, old_source_values, dest_texts,
-                                    '\ufeffl_' + dest_lang + ':\n', '\ufeffl_' + source_lang + ':\n')
+                                    '\ufeffl_' + dest_lang + ':\n', '\ufeffl_' + source_lang + ':\n',
+                                    existing_translations)
 
 
 if __name__ == '__main__':
