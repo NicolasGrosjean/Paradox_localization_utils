@@ -159,6 +159,25 @@ cxfreeze -c src/copy_on_other_languages.py
 ```
 
  
+ ### Get duplicates keys
+ 
+ Get the list of duplicated keys in the localization to avoid localization erased by others.
+ 
+ #### Limits
+ 
+ The duplicated keys are searched in English localisation files only.
+ 
+ #### Usage
+ 
+ To get the full list of duplicated keys run the following command
+ ```
+python src/get_duplicates_key.py "<...>\MyMod\localisation"
+```
+ 
+ To get only the list of duplicated keys which already cause a bug
+ (the value is not the same for each duplication), add *-only_different_value* to the command.
+ 
+ 
 ### [DEPRECATED] Apply diff for EUIV and sooner
 ```
 python src/apply_diff.py <old_source_file> <new_source_file> <dest_file>
