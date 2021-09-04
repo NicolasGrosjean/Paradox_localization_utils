@@ -52,12 +52,15 @@ if __name__ == '__main__':
     extract_not_review = args.extract_not_review
     if extract_not_review is None:
         extract_not_review = False
-    for file in os.listdir(args.paratranz_dir):
-        if file.endswith('.json'):
-            if '_l_' not in file:
-                print(f'_l_ not in {file}')
-                continue
-            loc_file_name = file[:file.index('_l_')] + '_l_' + args.language + '.yml'
-            extract_paratranz_localisation(os.path.join(args.paratranz_dir, file),
-                                           os.path.join(args.localisation_dir, loc_file_name),
-                                           extract_not_review)
+    for root, _, files in os.walk(args.paratranz_dir):
+        for file in files:
+            if file.endswith('.json'):
+                if '_l_' not in file:
+                    print(f'_l_ not in {file}')
+                    continue
+                loc_file_name = file[:file.index('_l_')] + '_l_' + args.language + '.yml'
+                abs_path = os.path.abspath(os.path.join(root, loc_file_name))
+                rel_path = abs_path.replace(args.paratranz_dir, '')[1:]
+                extract_paratranz_localisation(os.path.join(root, file),
+                                               os.path.join(args.localisation_dir, rel_path),
+                                               extract_not_review)
