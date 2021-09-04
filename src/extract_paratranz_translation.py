@@ -36,6 +36,8 @@ def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_p
             else:
                 try:
                     key, value, version = get_key_value_and_version(lines[i])
+                    if version is None:
+                        version =''
                     if key in paratranz_data:
                         f.write(' ' + key + ':' + str(version) + ' "' + paratranz_data[key] + '"\n')
                     else:
