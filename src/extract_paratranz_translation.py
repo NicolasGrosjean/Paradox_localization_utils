@@ -15,6 +15,9 @@ def get_args():
 
 
 def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_path: str, extract_not_review: bool):
+    if not os.path.exists(localisation_file_path):
+        print(f'ERROR : {localisation_file_path} does not exist')
+        return
     with open(paratranz_file_path, 'r', encoding='utf8') as f:
         raw_paratranz_data = json.load(f)
     paratranz_data = dict()
