@@ -1,6 +1,9 @@
 .idea/
+.vscode/launch.json
 *.pyc
 *.exe
 *.spec
 *.log
 dist/
+tests/data/extract_existing_translation/target/
+tests/data/extract_paratranz_translation/target/

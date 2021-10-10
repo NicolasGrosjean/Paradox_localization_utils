@@ -1,2 +1,4 @@
 pandas
 python-levenshtein
+black
+flake8

@@ -4,16 +4,16 @@ def file_to_keys_and_values(absolute_file_path):
     :param absolute_file_path: Absolute file path of a Paradox localization file
     :return: (Dict with localization keys as keys, first line of the file)
     """
-    with open(absolute_file_path, 'r', encoding='utf8') as f:
+    with open(absolute_file_path, "r", encoding="utf8") as f:
         lines = f.readlines()
     res = dict()
     for i in range(len(lines)):
         try:
             key, value, version = get_key_value_and_version(lines[i])
-            res[key] = {'value': value, 'version': version}
+            res[key] = {"value": value, "version": version}
         except BadLocalizationException as e:
-            if str(e) == 'Missing double quote' and i > 0:
-                print(f'Missing double quote in file {absolute_file_path} line {i} : {lines[i]}')
+            if str(e) == "Missing double quote" and i > 0:
+                print(f"Missing double quote in file {absolute_file_path} line {i} : {lines[i]}")
     return res, lines[0]
 
 
@@ -23,7 +23,7 @@ def file_to_keys_and_lines(absolute_file_path):
     :param absolute_file_path: Absolute file path of a Paradox localization file
     :return: (Dict with localization keys as keys and lines as values, first line of the file)
     """
-    with open(absolute_file_path, 'r', encoding='utf8') as f:
+    with open(absolute_file_path, "r", encoding="utf8") as f:
         lines = f.readlines()
     res = dict()
     for i in range(1, len(lines)):
@@ -31,8 +31,8 @@ def file_to_keys_and_lines(absolute_file_path):
             key = get_key(lines[i])
             res[key] = lines[i]
         except BadLocalizationException as e:
-            if str(e) == 'Missing double quote' and i > 0:
-                print(f'Missing double quote in file {absolute_file_path} line {i} : {lines[i]}')
+            if str(e) == "Missing double quote" and i > 0:
+                print(f"Missing double quote in file {absolute_file_path} line {i} : {lines[i]}")
     return res, lines[0]
 
 
@@ -43,16 +43,16 @@ def get_key_value_and_version(line):
     :return: (localization key, value corresponding to the localization key, version of the value)
     """
     i = 0
-    while i < len(line) and line[i] == ' ':
+    while i < len(line) and line[i] == " ":
         i += 1
-    if i < len(line) and line[i] == '#':
-        raise BadLocalizationException('Comment line')
-    split_line = line.split(':')
+    if i < len(line) and line[i] == "#":
+        raise BadLocalizationException("Comment line")
+    split_line = line.split(":")
     if len(split_line) < 2:
-        raise BadLocalizationException('No semicolon found')
+        raise BadLocalizationException("No semicolon found")
     key = split_line[0]
     i = 0
-    while key[i] == ' ' or key[i] == '\t':
+    while key[i] == " " or key[i] == "\t":
         i += 1
     key = key[i:]
     text = split_line[1]
@@ -68,11 +68,11 @@ def get_key_value_and_version(line):
         text = text[i:]
     if len(split_line) > 2:
         for i in range(2, len(split_line)):
-            text += ':' + split_line[i]
+            text += ":" + split_line[i]
     start = text.find('"') + 1
     end = text.rfind('"')
     if start > end:
-        raise BadLocalizationException('Missing double quote')
+        raise BadLocalizationException("Missing double quote")
     text = text[start:end]
     return key, text, version
 
@@ -84,16 +84,16 @@ def get_key(line):
     :return: (localization key, value corresponding to the localization key, version of the value)
     """
     i = 0
-    while i < len(line) and line[i] == ' ':
+    while i < len(line) and line[i] == " ":
         i += 1
-    if i < len(line) and line[i] == '#':
-        raise BadLocalizationException('Comment line')
-    split_line = line.split(':')
+    if i < len(line) and line[i] == "#":
+        raise BadLocalizationException("Comment line")
+    split_line = line.split(":")
     if len(split_line) < 2:
-        raise BadLocalizationException('No semicolon found')
+        raise BadLocalizationException("No semicolon found")
     key = split_line[0]
     i = 0
-    while key[i] == ' ' or key[i] == '\t':
+    while key[i] == " " or key[i] == "\t":
         i += 1
     return key[i:]
 
