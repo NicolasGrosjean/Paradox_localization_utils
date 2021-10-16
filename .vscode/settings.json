@@ -4,7 +4,7 @@
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [
         "--max-line-length=119",
-        "--extend-ignore=E501,E203"
+        "--extend-ignore=E501,E203, E402"
     ],
     "python.testing.unittestArgs": [
         "-v",
