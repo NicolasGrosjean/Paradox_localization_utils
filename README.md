@@ -75,15 +75,15 @@ Not yet implemented
 
 #### For EUIV, HoI4 or Stellaris
 ```
-python src/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> <current_localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang>
+python src/apply_diff_all.py <old_source_dir> <source_dir> <dest_dir> -source_lang <source_lang> -dest_lang <dest_lang>
 ```
 
-Example to add in French files missing lines from English files
+Example to apply in French files the modifications done in English
 ```
 python src/apply_diff_all.py "<...>\V1\localisation" "<...>\V2\localisation" "<...>\V2\localisation" -source_lang english -dest_lang french
 ```
 
-The destination file is override so don't hesitate to have a backup before running this.
+The destination files are overriden so don't hesitate to have a backup before running this.
 
 The new and edited lines contains `:9 "`.
 
