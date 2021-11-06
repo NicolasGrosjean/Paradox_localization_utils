@@ -47,4 +47,5 @@ jobs:
         owner: NicolasGrosjean
         repo: Paradox_localization_utils 
         branch-name: actions
+        remote-dir: badges
 

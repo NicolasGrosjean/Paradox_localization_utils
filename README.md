@@ -1,5 +1,5 @@
 [![Build Status](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/badge.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
-[![Coverage](https://raw.githubusercontent.com/NicolasGrosjean/Paradox_localization_utils/actions/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+[![Coverage](https://raw.githubusercontent.com/NicolasGrosjean/Paradox_localization_utils/actions/badges/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
 
 # Paradox localization utils
 
