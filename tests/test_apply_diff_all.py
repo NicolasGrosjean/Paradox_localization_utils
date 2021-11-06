@@ -4,7 +4,7 @@ import os
 import shutil
 
 from tests.utils import get_data_dir
-from src.apply_diff_all import apply_diff_all_eu_hoi_stellaris
+from src.apply_diff_all import DELETED_LINES_FILE_NAME, apply_diff_all_eu_hoi_stellaris
 
 
 class TestApplyDiffAll(unittest.TestCase):
@@ -61,7 +61,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY30:9 "value of a new key"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY30:Z "value of a new key"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  KEY31:2 "valeur1"')
@@ -72,13 +72,16 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Events")
         self.assertEqual(lines[2].replace("\n", ""), '  KEY41:2 "valeur1"')
+        with open(DELETED_LINES_FILE_NAME) as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace("\n", ""), '  KEY40:0 "valeur0"')
 
     def test_apply_diff_edited_line(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "5_l_french.yml")), "r", encoding="utf8") as f:
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY50:9 "value01234567891011"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY50:1 "valeur0"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  KEY51:2 "valeur1"')
@@ -88,7 +91,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY60:9 "valeur0"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY60:1 "valeur0"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  KEY61:2 "valeur1"')
@@ -98,7 +101,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY70:9 "value14"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY70:1 "value0"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  KEY71:2 "value1"')
@@ -146,7 +149,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' NEW_KEY0:9 "Value of new file"')
+        self.assertEqual(lines[2].replace("\n", ""), ' NEW_KEY0:Z "Value of new file"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
-        self.assertEqual(lines[5].replace("\n", ""), ' NEW_KEY1:9 "Value of new file 2"')
+        self.assertEqual(lines[5].replace("\n", ""), ' NEW_KEY1:Z "Value of new file 2"')

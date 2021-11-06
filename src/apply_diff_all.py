@@ -13,6 +13,9 @@ from src.read_localization_file import (
 )
 
 
+DELETED_LINES_FILE_NAME = "deleted_lines.txt"
+
+
 def get_args():
     parser = argparse.ArgumentParser(description="Apply diff in source to destination for all files")
     parser.add_argument("old_source_dir", type=str, help="Directory with source Paradox files for previous version")
