@@ -34,6 +34,7 @@ jobs:
     - name: Coverarage with pytest
       run: |
         coverage run --omit "tests/*.py" -m pytest ./tests/ --junitxml=./report.xml -s
+        coverage xml
         genbadge tests -i ./report.xml -s -o ./tests.svg
         genbadge coverage -i ./coverage.xml -s -o ./coverage.svg
 
