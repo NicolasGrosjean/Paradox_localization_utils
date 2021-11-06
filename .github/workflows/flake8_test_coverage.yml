@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: Tests
 
 on:
   push:
@@ -31,10 +31,20 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=119 --statistics
-    - name: Coverarage with pytest
+    - name: Coverage with pytest
       run: |
         coverage run --omit "tests/*.py" -m pytest ./tests/ --junitxml=./report.xml -s
         coverage xml
         genbadge tests -i ./report.xml -s -o ./tests.svg
         genbadge coverage -i ./coverage.xml -s -o ./coverage.svg
+          - name: Setup node
+        uses: actions/setup-node@v1
+    - name: Upload badge to GitHub
+      uses: LasyIsLazy/github-upload-action@v0.0.1
+      with:
+        access-token: ${{ secrets.ACCESS_TOKEN }}
+        file-path: coverage.svg
+        owner: NicolasGrosjean
+        repo: Paradox_localization_utils 
+        branch-name: actions
 

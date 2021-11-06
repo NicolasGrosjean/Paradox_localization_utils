@@ -1,5 +1,5 @@
 [![Build Status](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/badge.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
-[![Coverage](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+[![Coverage](https://raw.githubusercontent.com/NicolasGrosjean/Paradox_localization_utils/actions/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
 
 # Paradox localization utils
 
@@ -230,6 +230,10 @@ Go to the tests directory and run unittest
 cd tests
 python -m unittest discover
 ```
+
+## Run actions
+
+Th upload badge to GitHub action should have access to your GitHub repository. Strongly recommend store it in secrets. [Create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with the `repo` permission. [Create a secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) named `ACCESS_TOKEN` in your repository and copy access token to the secret value.
 
 ## License
 
