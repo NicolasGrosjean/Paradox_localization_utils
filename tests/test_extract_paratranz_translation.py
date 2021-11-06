@@ -10,8 +10,9 @@ class TestExtractParatranzTranslation(unittest.TestCase):
     def setUp(self):
         self.data_dir = os.path.join(get_data_dir(), "extract_paratranz_translation")
         self.localisation_dir = os.path.join(self.data_dir, "target")
-        shutil.rmtree(self.localisation_dir)
-        os.makedirs(self.localisation_dir)
+        if os.path.exists(self.localisation_dir):
+            shutil.rmtree(self.localisation_dir)
+            os.makedirs(self.localisation_dir)
 
     def test_extract_basic_paratranz_translation(self):
         shutil.copyfile(
