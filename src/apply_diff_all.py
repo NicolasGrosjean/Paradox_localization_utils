@@ -3,6 +3,7 @@ import Levenshtein
 import os
 
 import sys
+
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from src.read_localization_file import (
     file_to_keys_and_lines,
@@ -16,7 +17,11 @@ def get_args():
     parser = argparse.ArgumentParser(description="Apply diff in source to destination for all files")
     parser.add_argument("old_source_dir", type=str, help="Directory with source Paradox files for previous version")
     parser.add_argument("source_dir", type=str, help="Directory with source Paradox files for new version")
-    parser.add_argument("-dest_dir", type=str, help="Directory with destination Paradox files (not used when EUIV, HoI4 or Stellaris game)")
+    parser.add_argument(
+        "-dest_dir",
+        type=str,
+        help="Directory with destination Paradox files (not used when EUIV, HoI4 or Stellaris game)",
+    )
     parser.add_argument("-source_lang", type=str, help="Source language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-dest_lang", type=str, help="Destination language when EUIV, HoI4 or Stellaris game")
     return parser.parse_args()
@@ -29,13 +34,18 @@ def write_new_line_or_get_existing_translation(f, key, value, existing_translati
         f.write(" " + key + ':9 "' + value + '"\n')
 
 
+def is_source_lang_line(line: str, language: str):
+    lang_line = f"l_{language}:"
+    return line.replace("\ufeff", "").replace("\n", "").replace(" ", "").replace("\t", "") == lang_line
+
+
 def apply_diff_one_file(
     source_file_path,
     dest_file_path,
     old_source_values,
     dest_texts,
     dest_lang_line,
-    source_lang_line,
+    source_lang,
     existing_translations,
 ):
     with open(source_file_path, "r", encoding="utf8") as f:
@@ -46,9 +56,7 @@ def apply_diff_one_file(
         first_line = True
         for source_line in source_lines:
             if not source_lang_line_seen:
-                if source_line.replace("\ufeff", "").replace("\n", "") != source_lang_line.replace(
-                    "\ufeff", ""
-                ).replace("\n", ""):
+                if not is_source_lang_line(source_line, source_lang):
                     # Copy source header
                     f.write(source_line)
                 else:
@@ -145,7 +153,7 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                     old_source_values,
                     dest_texts,
                     "\ufeffl_" + dest_lang + ":\n",
-                    "\ufeffl_" + source_lang + ":\n",
+                    source_lang,
                     existing_translations,
                 )
 
