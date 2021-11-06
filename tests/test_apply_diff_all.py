@@ -31,6 +31,8 @@ class TestApplyDiffAll(unittest.TestCase):
         for file in os.listdir(os.path.join(cls.data_dir, "new")):
             if file.endswith("l_french.yml"):
                 os.remove(os.path.join(cls.data_dir, "new", file))
+        if os.path.exists(DELETED_LINES_FILE_NAME):
+            os.remove(DELETED_LINES_FILE_NAME)
 
     def test_apply_diff_same_sources(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "0_l_french.yml")), "r", encoding="utf8") as f:

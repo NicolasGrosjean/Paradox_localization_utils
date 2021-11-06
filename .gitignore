@@ -9,3 +9,4 @@ tests/data/extract_existing_translation/target/*
 !tests/data/extract_existing_translation/target/.gitkeep
 tests/data/extract_paratranz_translation/target/*
 !tests/data/extract_paratranz_translation/target/.gitkeep
+deleted_lines.txt

@@ -98,10 +98,9 @@ python src/apply_diff_all.py "<...>\V1\localisation" "<...>\V2\localisation" -so
 
 The destination files are overriden so don't hesitate to have a backup before running this.
 
-The new and edited lines contains `:9 "`.
+The new lines has a 'Z' instead of a version number.
 
-If there is less than 10 modifications (according Levenshtein distance),
-the destination text is kept.
+The deleted lines are exported in the `deleted_lines.txt` file.
 
 ### Extract existing translation
 

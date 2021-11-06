@@ -42,6 +42,7 @@ def apply_diff_one_file(
     dest_lang_line,
     source_lang,
     existing_translations,
+    dest_lines_not_found,
 ):
     with open(source_file_path, "r", encoding="utf8") as f:
         source_lines = f.readlines()
@@ -77,12 +78,18 @@ def apply_diff_one_file(
                         if dest_text != "":
                             # We keep destination text but update version
                             f.write(f' {key}:{version} "{dest_text}"\n')
+                            # Update the dest lines not found
+                            if dest_texts[key] in dest_lines_not_found:
+                                dest_lines_not_found.remove(dest_texts[key])
                         else:
                             # Error with destination text extracted, we use source text
                             f.write(source_line)
                     else:
                         # Keep previous translation
                         f.write(dest_texts[key])
+                        # Update the dest lines not found
+                        if dest_texts[key] in dest_lines_not_found:
+                            dest_lines_not_found.remove(dest_texts[key])
                 else:
                     if value in existing_translations:
                         # Add existing translation
@@ -128,6 +135,8 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
     for source_key in old_source_values.keys():
         if source_key in dest_values.keys() and old_source_values[source_key]["value"] != "":
             existing_translations[old_source_values[source_key]["value"]] = dest_values[source_key]["value"]
+    # List all dest lines to export deleted ones
+    dest_lines_not_found = {line for line in dest_texts.values() if not line.replace("\ufeff", "").startswith(f"l_{dest_lang}")}
     # Apply diff with current source texts
     for root, _, files in os.walk(current_dir):
         for file in files:
@@ -146,7 +155,12 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                     "\ufeffl_" + dest_lang + ":\n",
                     source_lang,
                     existing_translations,
+                    dest_lines_not_found,
                 )
+    # Export dest lines not found if there are some ones
+    if len(dest_lines_not_found) > 0:
+        with open(DELETED_LINES_FILE_NAME, "w") as f:
+            f.writelines(dest_lines_not_found)
 
 
 if __name__ == "__main__":
