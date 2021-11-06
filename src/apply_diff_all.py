@@ -91,11 +91,12 @@ def apply_diff_one_file(
                         if dest_texts[key] in dest_lines_not_found:
                             dest_lines_not_found.remove(dest_texts[key])
                 else:
+                    print_version = version if version is not None else ""
                     if value in existing_translations:
                         # Add existing translation
-                        f.write(f' {key}:{version} "{existing_translations[value]}"\n')
+                        f.write(f' {key}:{print_version} "{existing_translations[value]}"\n')
                     else:
-                        f.write(f' {key}:{version}Z "{value}"\n')
+                        f.write(f' {key}:{print_version}Z "{value}"\n')
             first_line = False
 
 

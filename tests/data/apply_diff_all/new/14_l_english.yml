@@ -1,0 +1,6 @@
+l_english:
+  # Ideas
+  NEW_KEY_W_VERSION: "value of a new key without version"
+  
+  # Events
+  KEY_W_VERSION: "value of key without version"
