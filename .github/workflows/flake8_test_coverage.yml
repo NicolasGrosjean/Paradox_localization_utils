@@ -35,16 +35,16 @@ jobs:
         coverage xml
         genbadge tests -i ./report.xml -s -o ./tests.svg
         genbadge coverage -i ./coverage.xml -s -o ./coverage.svg
-    - name: Setup node
-      uses: actions/setup-node@v1
-    - name: Upload badge to GitHub
-      uses: LasyIsLazy/github-upload-action@v0.1.0
-      with:
-        access-token: ${{ secrets.ACCESS_TOKEN }}
-        file-path: coverage.svg
-        owner: NicolasGrosjean
-        repo: Paradox_localization_utils 
-        branch-name: actions
-        remote-dir: badges
-        commit-message: Update coverage badge
+    # - name: Setup node
+    #   uses: actions/setup-node@v1
+    # - name: Upload badge to GitHub
+    #   uses: LasyIsLazy/github-upload-action@v0.1.0
+    #   with:
+    #     access-token: ${{ secrets.ACCESS_TOKEN }}
+    #     file-path: coverage.svg
+    #     owner: NicolasGrosjean
+    #     repo: Paradox_localization_utils 
+    #     branch-name: actions
+    #     remote-dir: badges
+    #     commit-message: Update coverage badge
 
