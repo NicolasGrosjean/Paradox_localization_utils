@@ -46,4 +46,5 @@ jobs:
         repo: Paradox_localization_utils 
         branch-name: actions
         remote-dir: badges
+        commit-message: Update coverage badge
 
