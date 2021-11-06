@@ -9,6 +9,8 @@ from tests.utils import get_data_dir
 class TestExtractExistingTranslation(unittest.TestCase):
     def setUp(self):
         self.data_dir = os.path.join(get_data_dir(), "extract_existing_translation")
+        shutil.rmtree(os.path.join(self.data_dir, "target"))
+        os.makedirs(os.path.join(self.data_dir, "target"))
         for file in os.listdir(os.path.join(self.data_dir, "original")):
             shutil.copyfile(os.path.join(self.data_dir, "original", file), os.path.join(self.data_dir, "target", file))
 
