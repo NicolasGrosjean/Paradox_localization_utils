@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/badge.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+[![Coverage](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+
 # Paradox localization utils
 
 > A set of tools to manipulate Paradox localization files particularly for translating 
