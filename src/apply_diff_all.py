@@ -16,7 +16,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="Add missing lines to translation files")
     parser.add_argument("old_source_dir", type=str, help="Directory with source Paradox files for previous version")
     parser.add_argument("source_dir", type=str, help="Directory with source Paradox files for new version")
-    parser.add_argument("dest_dir", type=str, help="Directory with destination Paradox files")
+    parser.add_argument("-dest_dir", type=str, help="Directory with destination Paradox files (not used when EUIV, HoI4 or Stellaris game)")
     parser.add_argument("-source_lang", type=str, help="Source language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-dest_lang", type=str, help="Destination language when EUIV, HoI4 or Stellaris game")
     return parser.parse_args()
