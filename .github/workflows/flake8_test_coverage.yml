@@ -38,7 +38,7 @@ jobs:
         genbadge tests -i ./report.xml -s -o ./tests.svg
         genbadge coverage -i ./coverage.xml -s -o ./coverage.svg
     - name: Setup node
-        uses: actions/setup-node@v1
+      uses: actions/setup-node@v1
     - name: Upload badge to GitHub
       uses: LasyIsLazy/github-upload-action@v0.0.1
       with:
