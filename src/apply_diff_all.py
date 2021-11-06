@@ -95,7 +95,7 @@ def apply_diff_one_file(
                         # Add existing translation
                         f.write(f' {key}:{version} "{existing_translations[value]}"\n')
                     else:
-                        f.write(f' {key}:Z "{value}"\n')
+                        f.write(f' {key}:{version}Z "{value}"\n')
             first_line = False
 
 
