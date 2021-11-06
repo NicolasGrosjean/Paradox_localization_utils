@@ -1,5 +1,4 @@
 import argparse
-import Levenshtein
 import os
 
 import sys
@@ -28,13 +27,6 @@ def get_args():
     parser.add_argument("-source_lang", type=str, help="Source language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-dest_lang", type=str, help="Destination language when EUIV, HoI4 or Stellaris game")
     return parser.parse_args()
-
-
-def write_new_line_or_get_existing_translation(f, key, value, existing_translations):
-    if value in existing_translations:
-        f.write(" " + key + ':0 "' + existing_translations[value] + '"\n')
-    else:
-        f.write(" " + key + ':9 "' + value + '"\n')
 
 
 def is_source_lang_line(line: str, language: str):
@@ -75,32 +67,28 @@ def apply_diff_one_file(
                 except BadLocalizationException:
                     f.write(source_line)
                     continue
-                if key in old_source_values and Levenshtein.distance(old_source_values[key]["value"], value) >= 10:
-                    # The source has changed enough to replace destination by current source text
-                    # OR translation if already translated elsewhere
-                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
-                elif key in dest_texts and (dest_texts[key] != "" or value == ""):
+                if key in dest_texts and (dest_texts[key] != "" or value == ""):
                     try:
                         _, dest_text, _ = get_key_value_and_version(dest_texts[key])
                     except BadLocalizationException:
                         dest_text = ""
-                    if key in old_source_values and Levenshtein.distance(old_source_values[key]["value"], value) > 0:
-                        if dest_text != old_source_values[key]["value"]:
-                            # The source has little changed and has been translated,
-                            # we keep translation but change version number
-                            # OR translation if already translated elsewhere
-                            write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations)
+                    if key in old_source_values and old_source_values[key]["value"] != value:
+                        # The source has changed
+                        if dest_text != "":
+                            # We keep destination text but update version
+                            f.write(f' {key}:{version} "{dest_text}"\n')
                         else:
-                            # Add current source text because the previous destination was not translated
-                            # OR translation if already translated elsewhere
-                            write_new_line_or_get_existing_translation(f, key, value, existing_translations)
+                            # Error with destination text extracted, we use source text
+                            f.write(source_line)
                     else:
                         # Keep previous translation
                         f.write(dest_texts[key])
                 else:
-                    # Add current source text
-                    # OR translation if already translated elsewhere
-                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
+                    if value in existing_translations:
+                        # Add existing translation
+                        f.write(f' {key}:{version} "{existing_translations[value]}"\n')
+                    else:
+                        f.write(f' {key}:Z "{value}"\n')
             first_line = False
 
 

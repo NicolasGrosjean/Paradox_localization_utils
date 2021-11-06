@@ -30,15 +30,6 @@ Activate the conda environment
 activate paradox_loc
 ```
 
-Install Levenshtein package (only needed for *apply_diff_all*)
-```
-conda install python-levenshtein==0.12.0
-```
-OR
-```
-pip install python-levenshtein==0.12.0
-```
-
 Install pandas package (only needed for *extract_existing_translation*)
 ```
 pip install pandas
