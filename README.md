@@ -1,5 +1,14 @@
 # Paradox localization utils
 
+> A set of tools to manipulate Paradox localization files particularly for translating 
+
+## Terms
+
+* Source: It refers to the source language of your translation
+* Destination (shorten dest): It refers to the destination language of your translation
+
+Example : If I translate from English to French, the source directory refers to the directory of English localisation files.
+
 ## Installation
 
 I recommend you to install a Python environment with conda, virtualenv or pipenv.
@@ -36,6 +45,9 @@ pip install pandas
 
 ### Update source
 
+> Update the localization files of your source languages.
+> It also copy in the parent of the target directory an extract of the source localization and all files in target_dir.
+
 ```
 python src/update_source.py <source_dir> <target_dir> <source_lang>
 ```
@@ -46,6 +58,8 @@ python src/update_source.py <...>\Steam\steamapps\workshop\content\394360\152169
 ```
 
 ### Add missing lines
+
+> Add in the destination files the lines which are missing from the source ones
 
 #### For Imperator Rome and sooner
 ```
@@ -69,6 +83,8 @@ python src/add_missing_lines.py "<...>\localisation" "<...>\localisation" -sourc
 
 
 ### Apply diff all
+
+> Apply the differences between an old source version and a current source version to your current destination files.
 
 #### For Imperator Rome and sooner
 Not yet implemented
@@ -95,6 +111,8 @@ the destination text is kept.
 
 ### Extract existing translation
 
+> Extract existing translation from another game or mod to apply to your translation
+
 #### Limits
 The target is EUIV or sooner whereas the source can be CK2/Vic2 or EUIV and sooner.
 
@@ -115,7 +133,7 @@ python src/extract_existing_translation.py "<...>\Steam\steamapps\common\Hearts 
 
 ### Extract Paratranz translation
 
-Extract translations from JSON files downloaded from [Paratranz](https://paratranz.cn).
+> Extract translations from JSON files downloaded from [Paratranz](https://paratranz.cn) to apply to your translation.
 
 #### Limits
 This script only works for EUIV and sooner.
@@ -139,6 +157,8 @@ python src/extract_paratranz_translation.py "<...>\paratranz" "<...>\localisatio
 ```
 
 ### Copy localization in other languages
+
+> Copy the localization of a language in other languages to allow to run your game/mod with this language with source texts instead of keys.
 
 #### Limits
 It works only for Imperator Rome and sooner.
@@ -164,7 +184,7 @@ cxfreeze -c src/copy_on_other_languages.py
  
  ### Get duplicates keys
  
- Get the list of duplicated keys in the localization to avoid localization erased by others.
+ > Get the list of duplicated keys in the localization to avoid localization erased by others.
  
  #### Limits
  

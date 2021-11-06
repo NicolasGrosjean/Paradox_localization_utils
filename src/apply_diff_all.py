@@ -13,7 +13,7 @@ from src.read_localization_file import (
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Add missing lines to translation files")
+    parser = argparse.ArgumentParser(description="Apply diff in source to destination for all files")
     parser.add_argument("old_source_dir", type=str, help="Directory with source Paradox files for previous version")
     parser.add_argument("source_dir", type=str, help="Directory with source Paradox files for new version")
     parser.add_argument("-dest_dir", type=str, help="Directory with destination Paradox files (not used when EUIV, HoI4 or Stellaris game)")

@@ -12,7 +12,7 @@ from src.read_localization_file import (
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="Apply diff in source to destination ")
+    parser = argparse.ArgumentParser(description="Apply diff in source to destination")
     parser.add_argument("old_source_file", type=str, help="Source file before modifications")
     parser.add_argument("new_source_file", type=str, help="Source file after modifications")
     parser.add_argument("dest_file", type=str, help="Destination file to override")
