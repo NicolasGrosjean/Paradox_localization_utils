@@ -1,0 +1,6 @@
+l_english:
+  # Ideas
+  NEW_KEY0:0 "Value of new file"
+  
+  # Events
+  NEW_KEY1:2 "Value of new file 2"
