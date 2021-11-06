@@ -12,6 +12,7 @@ class TestExtractExistingTranslation(unittest.TestCase):
         if os.path.exists(os.path.join(self.data_dir, "target")):
             shutil.rmtree(os.path.join(self.data_dir, "target"))
             os.makedirs(os.path.join(self.data_dir, "target"))
+        print(os.path.exists(os.path.join(self.data_dir, "target")))
         for file in os.listdir(os.path.join(self.data_dir, "original")):
             shutil.copyfile(os.path.join(self.data_dir, "original", file), os.path.join(self.data_dir, "target", file))
 
