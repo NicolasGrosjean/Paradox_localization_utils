@@ -1,0 +1,4 @@
+﻿l_english:
+ KEY90:0 "value0" # comment
+ KEY91:1 "edited #Cvalue1#!" # another comment
+ KEY92:0 "value2" # New line with comment

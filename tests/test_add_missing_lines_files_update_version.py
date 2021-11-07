@@ -131,3 +131,14 @@ class TestAddMissingLinesFilesUpdateVersion(unittest.TestCase):
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_english:")
         self.assertEqual(lines[1].replace("\n", ""), ' NEWKEY0:0 "value0"')
         self.assertEqual(lines[2].replace("\n", ""), ' NEWKEY1:2 "value1"')
+
+    def test_comment_in_line(self):
+        with open(
+            os.path.abspath(os.path.join(self.data_dir, "target", "9_l_english.yml")), "r", encoding="utf8"
+        ) as f:
+            lines = f.readlines()
+        self.assertEqual(4, len(lines))
+        self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_english:")
+        self.assertEqual(lines[1].replace("\n", ""), ' KEY90:0 "value0" # comment')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY91:1 "#Cvalue1#!" # another comment')
+        self.assertEqual(lines[3].replace("\n", ""), ' KEY92:0 "value2" # New line with comment')

@@ -64,7 +64,7 @@ def apply_diff_one_file(
                     source_lang_line_seen = True
             else:
                 try:
-                    key, value, version = get_key_value_and_version(source_line)
+                    key, value, version, _ = get_key_value_and_version(source_line)
                     print_version = version if version is not None else ""
                 except BadLocalizationException:
                     f.write(source_line)

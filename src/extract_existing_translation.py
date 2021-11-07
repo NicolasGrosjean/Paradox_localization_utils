@@ -74,7 +74,7 @@ def insert_text(file_path, extracted_translation, target_source_files):
                 f.write(lines[0])
             else:
                 try:
-                    key, value, version = get_key_value_and_version(lines[i])
+                    key, _, _, _ = get_key_value_and_version(lines[i])
                     if key not in target_source_files:
                         raise Exception(
                             f"{key} not in the source file corresponding to {file_path}.\n"

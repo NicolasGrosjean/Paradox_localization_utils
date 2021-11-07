@@ -36,7 +36,7 @@ def apply_diff(old_source_file, new_source_file, dest_file, space_prefix="  ", k
                 f.write(dest_first_line)
             else:
                 try:
-                    key, value, version = get_key_value_and_version(source_lines[i])
+                    key, value, _, _ = get_key_value_and_version(source_lines[i])
                 except BadLocalizationException:
                     f.write(source_lines[i])
                     continue

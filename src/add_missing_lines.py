@@ -30,7 +30,7 @@ def add_missing_lines_one_file(source_file_path, dest_file_path, dest_texts, des
                     f.write(dest_first_line)
             else:
                 try:
-                    key, value, version = get_key_value_and_version(source_lines[i])
+                    key, value, version, _ = get_key_value_and_version(source_lines[i])
                 except BadLocalizationException:
                     f.write(source_lines[i])
                     continue
