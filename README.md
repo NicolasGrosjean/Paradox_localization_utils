@@ -76,6 +76,18 @@ python src/add_missing_lines.py "<...>\localisation" "<...>\localisation" -sourc
 ```
 
 
+### Add missing lines, files and update version
+
+> Transform files of old directory to the new ones by adding missing lines and files, and updating version number.
+> Other said, all is update excepted edited texts which are not edited.
+> It is useful to have an intermediate version of source files between old and new version.
+
+```
+python src/add_missing_lines_files_update_version.py <old_dir> <new_dir>
+```
+
+WARNING: The files of old_dir are overriden so don't hesitate to have a backup before running this.
+
 ### Apply diff all
 
 > Apply the differences between an old source version and a current source version to your current destination files.
@@ -96,7 +108,7 @@ Example to apply in French files the modifications done in English
 python src/apply_diff_all.py "<...>\V1\localisation" "<...>\V2\localisation" -source_lang english -dest_lang french
 ```
 
-The destination files are overriden so don't hesitate to have a backup before running this.
+WARNING: The destination files are overriden so don't hesitate to have a backup before running this.
 
 The new lines has a 'Z' instead of a version number.
 

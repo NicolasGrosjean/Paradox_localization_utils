@@ -9,4 +9,7 @@ tests/data/extract_existing_translation/target/*
 !tests/data/extract_existing_translation/target/.gitkeep
 tests/data/extract_paratranz_translation/target/*
 !tests/data/extract_paratranz_translation/target/.gitkeep
+tests/data/add_missing_lines_files_update_version/target/*.yml
+tests/data/add_missing_lines_files_update_version/target/subdir/*.yml
+tests/data/add_missing_lines_files_update_version/target/new_dir/*.yml
 deleted_lines.txt
