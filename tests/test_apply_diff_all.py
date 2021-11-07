@@ -72,7 +72,7 @@ class TestApplyDiffAll(unittest.TestCase):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "4_l_french.yml")), "r", encoding="utf8") as f:
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
-        self.assertEqual(lines[1].replace("\n", ""), "  # Events")
+        self.assertEqual(lines[1].replace("\n", ""), "  #1010 — 1031: Foreign Relations (Invite a foreign ruler to your court), by Mathilda Bjarnehed")
         self.assertEqual(lines[2].replace("\n", ""), '  KEY41:2 "valeur1"')
         with open(DELETED_LINES_FILE_NAME) as f:
             lines = f.readlines()
