@@ -71,7 +71,7 @@ def apply_diff_one_file(
                     continue
                 if key in dest_texts and (dest_texts[key] != "" or value == ""):
                     try:
-                        _, dest_text, _ = get_key_value_and_version(dest_texts[key])
+                        _, dest_text, _, _ = get_key_value_and_version(dest_texts[key])
                     except BadLocalizationException:
                         dest_text = ""
                     if key in old_source_values and old_source_values[key]["value"] != value:
