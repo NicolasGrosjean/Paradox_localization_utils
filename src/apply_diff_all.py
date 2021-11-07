@@ -65,6 +65,7 @@ def apply_diff_one_file(
             else:
                 try:
                     key, value, version = get_key_value_and_version(source_line)
+                    print_version = version if version is not None else ""
                 except BadLocalizationException:
                     f.write(source_line)
                     continue
@@ -77,7 +78,7 @@ def apply_diff_one_file(
                         # The source has changed
                         if dest_text != "":
                             # We keep destination text but update version
-                            f.write(f' {key}:{version} "{dest_text}"\n')
+                            f.write(f' {key}:{print_version} "{dest_text}"\n')
                             # Update the dest lines not found
                             if dest_texts[key] in dest_lines_not_found:
                                 dest_lines_not_found.remove(dest_texts[key])
@@ -91,7 +92,6 @@ def apply_diff_one_file(
                         if dest_texts[key] in dest_lines_not_found:
                             dest_lines_not_found.remove(dest_texts[key])
                 else:
-                    print_version = version if version is not None else ""
                     if value in existing_translations:
                         # Add existing translation
                         f.write(f' {key}:{print_version} "{existing_translations[value]}"\n')
