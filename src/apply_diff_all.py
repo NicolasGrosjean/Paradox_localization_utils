@@ -160,7 +160,7 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                 )
     # Export dest lines not found if there are some ones
     if len(dest_lines_not_found) > 0:
-        with open(DELETED_LINES_FILE_NAME, "w") as f:
+        with open(DELETED_LINES_FILE_NAME, "w", encoding="utf8") as f:
             f.writelines(dest_lines_not_found)
 
 
