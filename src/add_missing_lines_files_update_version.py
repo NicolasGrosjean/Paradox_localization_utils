@@ -17,6 +17,7 @@ def get_args():
     )
     parser.add_argument("old_dir", type=str, help="Directory with old Paradox files which will be partially updated")
     parser.add_argument("new_dir", type=str, help="Directory with new Paradox files which update the old directory")
+    parser.add_argument("language", type=str, help="Language")
     return parser.parse_args()
 
 
@@ -45,12 +46,12 @@ def add_missing_lines_one_file(new_file_path: str, target_file_path: str, old_va
                 )
 
 
-def add_missing_lines_files_update_version(old_dir: str, new_dir: str):
+def add_missing_lines_files_update_version(old_dir: str, new_dir: str, language: str):
     rel_to_target_abs_path = dict()
     old_values_versions = dict()
     for root, _, files in os.walk(old_dir):
         for file in files:
-            if file.endswith(".yml"):
+            if file.endswith(language+".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
                 rel_path = abs_path.replace(os.path.abspath(old_dir), "")
                 if rel_path[0] == "\\":
@@ -61,7 +62,7 @@ def add_missing_lines_files_update_version(old_dir: str, new_dir: str):
                 old_values_versions = {**old_values_versions, **file_old_values_versions}
     for root, _, files in os.walk(new_dir):
         for file in files:
-            if file.endswith(".yml"):
+            if file.endswith(language+".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
                 rel_path = abs_path.replace(os.path.abspath(new_dir), "")
                 if rel_path[0] == "\\":
@@ -77,4 +78,4 @@ def add_missing_lines_files_update_version(old_dir: str, new_dir: str):
 
 if __name__ == "__main__":
     args = get_args()
-    add_missing_lines_files_update_version(args.old_dir, args.new_dir)
+    add_missing_lines_files_update_version(args.old_dir, args.new_dir, args.language)
