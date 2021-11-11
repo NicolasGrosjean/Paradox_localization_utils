@@ -84,10 +84,10 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY50:1 "valeur0"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY50:1 "valeur0" #ZX Comment to keep')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
-        self.assertEqual(lines[5].replace("\n", ""), '  KEY51:2 "valeur1"')
+        self.assertEqual(lines[5].replace("\n", ""), '  KEY51:2 "valeur1" #ZX Another comment to keep')
 
     def test_apply_diff_edited_line_keep_edited(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "6_l_french.yml")), "r", encoding="utf8") as f:
