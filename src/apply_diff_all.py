@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from src.read_localization_file import (
     file_to_keys_and_lines,
+    get_key,
     get_key_value_and_version,
     BadLocalizationException,
     file_to_keys_and_values,
@@ -139,7 +140,9 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
         if source_key in dest_values.keys() and old_source_values[source_key]["value"] != "":
             existing_translations[old_source_values[source_key]["value"]] = dest_values[source_key]["value"]
     # List all dest lines to export deleted ones
-    dest_lines_not_found = {line for line in dest_texts.values() if not line.replace("\ufeff", "").startswith(f"l_{dest_lang}")}
+    dest_lines_not_found = {
+        line for line in dest_texts.values() if not line.replace("\ufeff", "").startswith(f"l_{dest_lang}")
+    }
     # Apply diff with current source texts
     for root, _, files in os.walk(current_dir):
         for file in files:
@@ -162,9 +165,17 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                 )
     # Export dest lines not found if there are some ones
     if len(dest_lines_not_found) > 0:
-        with open(DELETED_LINES_FILE_NAME, "w", encoding="utf8") as f:
-            f.writelines(dest_lines_not_found)
-
+        dest_lines_not_found_list = list(dest_lines_not_found)
+        with open(f"{dest_lang}_{DELETED_LINES_FILE_NAME}", "w", encoding="utf8") as f:
+            f.writelines(dest_lines_not_found_list)
+        with open(f"{source_lang}_{DELETED_LINES_FILE_NAME}", "w", encoding="utf8") as f:
+            for line in dest_lines_not_found_list:
+                key = get_key(line)
+                old_source_line = old_source_values[key]
+                other = old_source_line["other"]
+                if len(other) == 0 or other[-1] != "\n":
+                    other += "\n"
+                f.write(f' {key}:{old_source_line["version"]} "{old_source_line["value"]}"{other}')
 
 if __name__ == "__main__":
     args = get_args()

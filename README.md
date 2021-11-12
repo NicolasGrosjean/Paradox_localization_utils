@@ -112,7 +112,7 @@ WARNING: The destination files are overriden so don't hesitate to have a backup 
 
 The new lines has a 'Z' instead of a version number.
 
-The deleted lines are exported in the `deleted_lines.txt` file.
+The deleted lines are exported in the `<source_lang>_deleted_lines.txt` and `<dest_lang>_deleted_lines.txt` files.
 
 ### Extract existing translation
 
