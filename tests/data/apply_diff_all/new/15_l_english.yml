@@ -1,0 +1,6 @@
+l_english:
+  # Ideas
+  KEY30:0 "value of a new key" #comment to keep
+  
+  # Events
+  KEY31:2 "value1"
