@@ -23,8 +23,12 @@ class TestAddMissingLinesFilesUpdateVersion(unittest.TestCase):
             if file != "subdir":
                 shutil.copyfile(os.path.join(cls.data_dir, "old", file), os.path.join(cls.data_dir, "target", file))
         for file in os.listdir(os.path.join(cls.data_dir, "old", "subdir")):
-            shutil.copyfile(os.path.join(cls.data_dir, "old", "subdir", file), os.path.join(cls.data_dir, "target", "subdir", file))
-        add_missing_lines_files_update_version(os.path.join(cls.data_dir, "target"), os.path.join(cls.data_dir, "new"))
+            shutil.copyfile(
+                os.path.join(cls.data_dir, "old", "subdir", file), os.path.join(cls.data_dir, "target", "subdir", file)
+            )
+        add_missing_lines_files_update_version(
+            os.path.join(cls.data_dir, "target"), os.path.join(cls.data_dir, "new"), "english"
+        )
 
     @classmethod
     def tearDownClass(cls):
