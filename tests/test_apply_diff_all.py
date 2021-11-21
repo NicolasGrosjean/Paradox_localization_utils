@@ -150,8 +150,8 @@ class TestApplyDiffAll(unittest.TestCase):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "12_l_french.yml")), "r", encoding="utf8") as f:
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
-        self.assertEqual(lines[1].replace("\n", ""), '  KEY0:0 "valeur0"')
-        self.assertEqual(lines[2].replace("\n", ""), '  KEY1:2 "valeur1"')
+        self.assertEqual(lines[1].replace("\n", ""), '  KEY120:0 "valeur0"')
+        self.assertEqual(lines[2].replace("\n", ""), '  KEY121:2 "valeur1"')
 
     def test_apply_diff_new_file(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "13_l_french.yml")), "r", encoding="utf8") as f:
@@ -178,7 +178,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY30:0Z "value of a new key" #comment to keep')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY150:0Z "value of a new key" #comment to keep')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
-        self.assertEqual(lines[5].replace("\n", ""), '  KEY31:2 "valeur1"')
+        self.assertEqual(lines[5].replace("\n", ""), '  KEY151:2 "valeur1"')
