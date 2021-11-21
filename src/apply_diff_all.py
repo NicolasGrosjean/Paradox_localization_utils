@@ -177,7 +177,8 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                 other = old_source_line["other"]
                 if len(other) == 0 or other[-1] != "\n":
                     other += "\n"
-                f.write(f' {key}:{old_source_line["version"]} "{old_source_line["value"]}"{other}')
+                version = old_source_line["version"] if old_source_line["version"] is not None else ""
+                f.write(f' {key}:{version} "{old_source_line["value"]}"{other}')
 
 if __name__ == "__main__":
     args = get_args()
