@@ -141,7 +141,7 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
-        self.assertEqual(lines[2].replace("\n", ""), ' New_translation:0 "Déjà traduit"')
+        self.assertEqual(lines[2].replace("\n", ""), ' New_translation:0Q "Déjà traduit"')
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  Existing_translation:2 "Déjà traduit"')

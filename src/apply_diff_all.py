@@ -99,7 +99,7 @@ def apply_diff_one_file(
                         source_other += "\n"
                     if value in existing_translations:
                         # Add existing translation
-                        f.write(f' {key}:{print_version} "{existing_translations[value]}"{source_other}')
+                        f.write(f' {key}:{print_version}Q "{existing_translations[value]}"{source_other}')
                     else:
                         f.write(f' {key}:{print_version}Z "{value}"{source_other}')
             first_line = False
