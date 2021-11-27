@@ -77,11 +77,14 @@ def apply_diff_one_file(
                         dest_text = ""
                     if key in old_source_values and old_source_values[key]["value"] != value:
                         # The source has changed
+                        old_source_other = old_source_values[key]["other"]
+                        if old_source_other[-1] == "\n":
+                            old_source_other = old_source_other[:-1]
                         if dest_text != "":
                             # We keep destination text but update version
                             if len(other) == 0 or other[-1] != "\n":
                                 other += "\n"
-                            f.write(f' {key}:{print_version} "{dest_text}"{other}')
+                            f.write(f' {key}:{print_version} "{dest_text}"{old_source_other}{other}')
                             # Update the dest lines not found
                             if dest_texts[key] in dest_lines_not_found:
                                 dest_lines_not_found.remove(dest_texts[key])

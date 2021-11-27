@@ -1,6 +1,6 @@
 l_english:
   # Ideas
-  KEY50:0 "value0"
+  KEY50:0 "value0" #Comment to keep
   
   # Events
-  KEY51:2 "value1"
+  KEY51:2 "value1" #A comment to drop
