@@ -9,8 +9,8 @@ def file_to_keys_and_values(absolute_file_path):
     res = dict()
     for i in range(len(lines)):
         try:
-            key, value, version, other = get_key_value_and_version(lines[i])
-            res[key] = {"value": value, "version": version, "other": other}
+            key, value, version, letter, other = get_key_value_and_version(lines[i])
+            res[key] = {"value": value, "version": version, "letter": letter, "other": other}
         except BadLocalizationException as e:
             if str(e) == "Missing double quote" and i > 0:
                 print(f"Missing double quote in file {absolute_file_path} line {i} : {lines[i]}")
@@ -66,6 +66,11 @@ def get_key_value_and_version(line):
                 version = 10 * version + int(text[i])
             i += 1
         text = text[i:]
+    letter = ''
+    if len(text) > 0:
+        if text[0] != ' ' and text[0] != '"':
+            letter = text[0]
+            text = text[1:]
     if len(split_line) > 2:
         for i in range(2, len(split_line)):
             text += ":" + split_line[i]
@@ -77,7 +82,7 @@ def get_key_value_and_version(line):
     if len(text) > end + 1:
         other = text[(end + 1):]
     text = text[start:end]
-    return key, text, version, other
+    return key, text, version, letter, other
 
 
 def get_key(line):

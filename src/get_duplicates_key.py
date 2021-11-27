@@ -25,7 +25,7 @@ if __name__ == "__main__":
                     lines = f.readlines()
                 for line in lines:
                     try:
-                        key, value, _, _ = get_key_value_and_version(line)
+                        key, value, _, _, _ = get_key_value_and_version(line)
                         if "l_english" in key or "spellcheck_ignore" in key:
                             continue
                         if key in keys_to_values and (not args.only_different_value or keys_to_values[key] != value):

@@ -31,7 +31,7 @@ def add_missing_lines_one_file(new_file_path: str, target_file_path: str, old_va
                 f.write(new_file_lines[0])
             else:
                 try:
-                    key, value, version, other = get_key_value_and_version(new_file_lines[i])
+                    key, value, version, _, other = get_key_value_and_version(new_file_lines[i])
                     new_version = "" if version is None else str(version)
                 except BadLocalizationException:
                     f.write(new_file_lines[i])

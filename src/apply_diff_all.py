@@ -65,14 +65,14 @@ def apply_diff_one_file(
                     source_lang_line_seen = True
             else:
                 try:
-                    key, value, version, source_other = get_key_value_and_version(source_line)
+                    key, value, version, _, source_other = get_key_value_and_version(source_line)
                     print_version = version if version is not None else ""
                 except BadLocalizationException:
                     f.write(source_line)
                     continue
                 if key in dest_texts and (dest_texts[key] != "" or value == ""):
                     try:
-                        _, dest_text, _, other = get_key_value_and_version(dest_texts[key])
+                        _, dest_text, _, letter, other = get_key_value_and_version(dest_texts[key])
                     except BadLocalizationException:
                         dest_text = ""
                     if key in old_source_values and old_source_values[key]["value"] != value:
@@ -84,7 +84,7 @@ def apply_diff_one_file(
                             # We keep destination text but update version
                             if len(other) == 0 or other[-1] != "\n":
                                 other += "\n"
-                            f.write(f' {key}:{print_version} "{dest_text}"{old_source_other}{other}')
+                            f.write(f' {key}:{print_version}{letter} "{dest_text}"{old_source_other}{other}')
                             # Update the dest lines not found
                             if dest_texts[key] in dest_lines_not_found:
                                 dest_lines_not_found.remove(dest_texts[key])

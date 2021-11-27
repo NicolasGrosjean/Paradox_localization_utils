@@ -188,11 +188,11 @@ class TestApplyDiffAll(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), '  KEY160:0 "valeur0"')
-        self.assertEqual(lines[2].replace("\n", ""), '  KEY161:0Z "valeur1"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY161:0Z "valeur1"')
 
     def test_apply_diff_edited_line_keep_Q(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "17_l_french.yml")), "r", encoding="utf8") as f:
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), '  KEY170:0 "valeur0"')
-        self.assertEqual(lines[2].replace("\n", ""), '  KEY171:0Z "valeur1"')
+        self.assertEqual(lines[2].replace("\n", ""), '  KEY171:0Q "valeur1"')
