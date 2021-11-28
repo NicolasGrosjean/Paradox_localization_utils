@@ -203,7 +203,7 @@ if __name__ == "__main__":
                 keys_to_ignore = []
             else:
                 with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
-                    keys_to_ignore = f.readlines()
+                    keys_to_ignore = [line.replace("\n", "") for line in f.readlines()]
             apply_diff_all_eu_hoi_stellaris(
                 args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
             )
