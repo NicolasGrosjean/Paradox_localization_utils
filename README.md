@@ -114,6 +114,10 @@ the destination text is kept.
 
 All the lines to translate are exported in to_translate/file_to_translate_<source_lang>.yml.
 
+We can also add the following parameter to the command line -keys_to_ignore <path_to_file_with_a_key_a_line>,
+to simply copy-paste lines with these keys.
+It is useful when you have keys like spellcheck_ignore in the source files.
+
 ### Extract existing translation
 
 > Extract existing translation from another game or mod to apply to your translation

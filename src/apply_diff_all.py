@@ -27,6 +27,7 @@ def get_args():
     )
     parser.add_argument("-source_lang", type=str, help="Source language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-dest_lang", type=str, help="Destination language when EUIV, HoI4 or Stellaris game")
+    parser.add_argument("-keys_to_ignore", type=str, help="File with at each lines a key to ignore")
     return parser.parse_args()
 
 
@@ -54,6 +55,7 @@ def apply_diff_one_file(
     source_lang,
     existing_translations,
     lines_to_translate,
+    keys_to_ignore,
 ):
     with open(source_file_path, "r", encoding="utf8") as f:
         source_lines = f.readlines()
@@ -77,6 +79,10 @@ def apply_diff_one_file(
                 try:
                     key, value, _ = get_key_value_and_version(source_line)
                 except BadLocalizationException:
+                    f.write(source_line)
+                    continue
+                if key in keys_to_ignore:
+                    # Write the new source line
                     f.write(source_line)
                     continue
                 if key in old_source_values and Levenshtein.distance(old_source_values[key]["value"], value) >= 10:
@@ -114,13 +120,14 @@ def apply_diff_one_file(
             first_line = False
 
 
-def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang):
+def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang, keys_to_ignore):
     """
     Apply diff for all files for EUIV, HoI4 or Stellaris
     :param old_dir: Directory with source Paradox files for previous version
     :param current_dir: Directory with source and destination Paradox files for new version
     :param source_lang: Source language
     :param dest_lang: Destination language
+    :param keys_to_ignore: List of keys to ignore
     :return:
     """
     # Store old source texts
@@ -171,6 +178,7 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                     source_lang,
                     existing_translations,
                     lines_to_translate,
+                    keys_to_ignore,
                 )
     # Export lines to translate
     if len(lines_to_translate) > 0:
@@ -191,4 +199,11 @@ if __name__ == "__main__":
     else:
         answer = input(f"Do want apply diff with {args.old_source_dir} as old source directory ? [y/N]")
         if answer.lower() == "y":
-            apply_diff_all_eu_hoi_stellaris(args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang)
+            if args.keys_to_ignore is None:
+                keys_to_ignore = []
+            else:
+                with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
+                    keys_to_ignore = f.readlines()
+            apply_diff_all_eu_hoi_stellaris(
+                args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
+            )

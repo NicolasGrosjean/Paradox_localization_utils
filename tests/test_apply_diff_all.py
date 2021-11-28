@@ -23,7 +23,7 @@ class TestApplyDiffAll(unittest.TestCase):
         for file in os.listdir(os.path.join(cls.data_dir, "dest")):
             shutil.copyfile(os.path.join(cls.data_dir, "dest", file), os.path.join(cls.data_dir, "new", file))
         apply_diff_all_eu_hoi_stellaris(
-            os.path.join(cls.data_dir, "old"), os.path.join(cls.data_dir, "new"), "english", "french"
+            os.path.join(cls.data_dir, "old"), os.path.join(cls.data_dir, "new"), "english", "french", ["KEYTOIGNORE"]
         )
 
     @classmethod
@@ -153,6 +153,16 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), ' NEW_KEY1:9 "Value of new file 2"')
+
+    def test_apply_diff_edited_line_but_key_to_ignore(self):
+        with open(os.path.abspath(os.path.join(self.data_dir, "new", "14_l_french.yml")), "r", encoding="utf8") as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
+        self.assertEqual(lines[1].replace("\n", ""), "  # Ideas")
+        self.assertEqual(lines[2].replace("\n", ""), '  KEYTOIGNORE:0 "value01234567891011"')
+        self.assertEqual(lines[3].replace("\n", ""), "  ")
+        self.assertEqual(lines[4].replace("\n", ""), "  # Events")
+        self.assertEqual(lines[5].replace("\n", ""), '  KEY141:2 "valeur1"')
 
     def test_lines_to_translatest(self):
         file_to_translate = os.path.join(self.data_dir, DIR_TO_TRANSLATE, f"{FILE_TO_TRANSLATE_PREFIX}_l_english.yml")
