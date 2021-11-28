@@ -4,7 +4,7 @@ import os
 import shutil
 
 from tests.utils import get_data_dir
-from src.apply_diff_all import apply_diff_all_eu_hoi_stellaris
+from src.apply_diff_all import DIR_TO_TRANSLATE, FILE_TO_TRANSLATE_PREFIX, apply_diff_all_eu_hoi_stellaris
 
 
 class TestApplyDiffAll(unittest.TestCase):
@@ -31,6 +31,9 @@ class TestApplyDiffAll(unittest.TestCase):
         for file in os.listdir(os.path.join(cls.data_dir, "new")):
             if file.endswith("l_french.yml"):
                 os.remove(os.path.join(cls.data_dir, "new", file))
+        file_to_translate = os.path.join(cls.data_dir, DIR_TO_TRANSLATE, f"{FILE_TO_TRANSLATE_PREFIX}_l_english.yml")
+        if os.path.exists(file_to_translate):
+            os.remove(file_to_translate)
 
     def test_apply_diff_same_sources(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "0_l_french.yml")), "r", encoding="utf8") as f:
@@ -150,3 +153,20 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[3].replace("\n", ""), "  ")
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), ' NEW_KEY1:9 "Value of new file 2"')
+
+    def test_lines_to_translatest(self):
+        file_to_translate = os.path.join(self.data_dir, DIR_TO_TRANSLATE, f"{FILE_TO_TRANSLATE_PREFIX}_l_english.yml")
+        self.assertTrue(os.path.exists(file_to_translate), f"{file_to_translate} doesn't exist")
+        with open(os.path.abspath(file_to_translate), "r", encoding="utf8") as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_english:")
+        expected_lines = [
+            ' KEY30:9 "value of a new key"\n',
+            ' KEY50:9 "value01234567891011"\n',
+            ' KEY70:9 "value14"\n',
+            ' NEW_KEY0:9 "Value of new file"\n',
+            ' NEW_KEY1:9 "Value of new file 2"\n',
+        ]
+        self.assertEqual(len(expected_lines), len(lines) - 1)
+        for line in expected_lines:
+            self.assertTrue(line in lines, f"{line} not found in {file_to_translate}")

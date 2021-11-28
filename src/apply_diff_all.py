@@ -12,6 +12,9 @@ from src.read_localization_file import (
     file_to_keys_and_values,
 )
 
+DIR_TO_TRANSLATE = "to_translate"
+FILE_TO_TRANSLATE_PREFIX = "file_to_translate"
+
 
 def get_args():
     parser = argparse.ArgumentParser(description="Apply diff in source to destination for all files")
@@ -27,11 +30,14 @@ def get_args():
     return parser.parse_args()
 
 
-def write_new_line_or_get_existing_translation(f, key, value, existing_translations):
+def write_new_line_or_get_existing_translation(f, key, value, existing_translations, lines_to_translate):
     if value in existing_translations:
         f.write(" " + key + ':0 "' + existing_translations[value] + '"\n')
     else:
-        f.write(" " + key + ':9 "' + value + '"\n')
+        line = " " + key + ':9 "' + value + '"\n'
+        f.write(line)
+        if lines_to_translate is not None:
+            lines_to_translate.append(line)
 
 
 def is_source_lang_line(line: str, language: str):
@@ -47,6 +53,7 @@ def apply_diff_one_file(
     dest_lang_line,
     source_lang,
     existing_translations,
+    lines_to_translate,
 ):
     with open(source_file_path, "r", encoding="utf8") as f:
         source_lines = f.readlines()
@@ -68,14 +75,16 @@ def apply_diff_one_file(
                     source_lang_line_seen = True
             else:
                 try:
-                    key, value, version = get_key_value_and_version(source_line)
+                    key, value, _ = get_key_value_and_version(source_line)
                 except BadLocalizationException:
                     f.write(source_line)
                     continue
                 if key in old_source_values and Levenshtein.distance(old_source_values[key]["value"], value) >= 10:
                     # The source has changed enough to replace destination by current source text
                     # OR translation if already translated elsewhere
-                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
+                    write_new_line_or_get_existing_translation(
+                        f, key, value, existing_translations, lines_to_translate
+                    )
                 elif key in dest_texts and (dest_texts[key] != "" or value == ""):
                     try:
                         _, dest_text, _ = get_key_value_and_version(dest_texts[key])
@@ -86,18 +95,22 @@ def apply_diff_one_file(
                             # The source has little changed and has been translated,
                             # we keep translation but change version number
                             # OR translation if already translated elsewhere
-                            write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations)
+                            write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations, None)
                         else:
                             # Add current source text because the previous destination was not translated
                             # OR translation if already translated elsewhere
-                            write_new_line_or_get_existing_translation(f, key, value, existing_translations)
+                            write_new_line_or_get_existing_translation(
+                                f, key, value, existing_translations, lines_to_translate
+                            )
                     else:
                         # Keep previous translation
                         f.write(dest_texts[key])
                 else:
                     # Add current source text
                     # OR translation if already translated elsewhere
-                    write_new_line_or_get_existing_translation(f, key, value, existing_translations)
+                    write_new_line_or_get_existing_translation(
+                        f, key, value, existing_translations, lines_to_translate
+                    )
             first_line = False
 
 
@@ -137,6 +150,8 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
     for source_key in old_source_values.keys():
         if source_key in dest_values.keys() and old_source_values[source_key]["value"] != "":
             existing_translations[old_source_values[source_key]["value"]] = dest_values[source_key]["value"]
+    # Store lines to translate
+    lines_to_translate = [f"\ufeffl_{source_lang}:\n"]
     # Apply diff with current source texts
     for root, _, files in os.walk(current_dir):
         for file in files:
@@ -155,7 +170,18 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                     "\ufeffl_" + dest_lang + ":\n",
                     source_lang,
                     existing_translations,
+                    lines_to_translate,
                 )
+    # Export lines to translate
+    if len(lines_to_translate) > 0:
+        dir_to_translate = os.path.join(current_dir, "..", DIR_TO_TRANSLATE)
+        os.makedirs(dir_to_translate, exist_ok=True)
+        with open(
+            os.path.join(dir_to_translate, f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml"),
+            "w",
+            encoding="utf8",
+        ) as f:
+            f.writelines(lines_to_translate)
 
 
 if __name__ == "__main__":

@@ -112,6 +112,8 @@ The new and edited lines contains `:9 "`.
 If there is less than 10 modifications (according Levenshtein distance),
 the destination text is kept.
 
+All the lines to translate are exported in to_translate/file_to_translate_<source_lang>.yml.
+
 ### Extract existing translation
 
 > Extract existing translation from another game or mod to apply to your translation
