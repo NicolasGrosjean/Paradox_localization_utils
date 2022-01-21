@@ -120,11 +120,12 @@ def apply_diff_one_file(
             first_line = False
 
 
-def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang, keys_to_ignore):
+def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest_lang, keys_to_ignore):
     """
-    Apply diff for all files for EUIV, HoI4 or Stellaris
+    Apply diff for all files
     :param old_dir: Directory with source Paradox files for previous version
-    :param current_dir: Directory with source and destination Paradox files for new version
+    :param current_src_dir: Directory with source Paradox files for new version
+    :param current_dest_dir: Directory with destination Paradox files for new version
     :param source_lang: Source language
     :param dest_lang: Destination language
     :param keys_to_ignore: List of keys to ignore
@@ -142,11 +143,11 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
     rel_to_dest_abs_path = dict()
     dest_texts = dict()
     dest_values = dict()
-    for root, _, files in os.walk(current_dir):
+    for root, _, files in os.walk(current_dest_dir):
         for file in files:
             if file.endswith(dest_lang + ".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
-                rel_to_dest_abs_path[abs_path[: abs_path.find("_l_")].replace(current_dir, "")] = abs_path
+                rel_to_dest_abs_path[abs_path[: abs_path.find("_l_")].replace(current_dest_dir, "")] = abs_path
                 file_dest_texts, _ = file_to_keys_and_lines(abs_path)
                 file_dest_values, _ = file_to_keys_and_values(abs_path)
                 os.remove(abs_path)
@@ -160,15 +161,17 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
     # Store lines to translate
     lines_to_translate = [f"\ufeffl_{source_lang}:\n"]
     # Apply diff with current source texts
-    for root, _, files in os.walk(current_dir):
+    for root, _, files in os.walk(current_src_dir):
         for file in files:
             if file.endswith(source_lang + ".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
-                rel_path = abs_path[: abs_path.find("_l_")].replace(current_dir, "")
+                rel_path = abs_path[: abs_path.find("_l_")].replace(current_src_dir, "")
                 if rel_path in rel_to_dest_abs_path:
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
-                    dest_file_path = abs_path.replace(source_lang + ".yml", dest_lang + ".yml")
+                    dest_file_path = abs_path.replace(
+                        current_src_dir + source_lang + ".yml", current_dest_dir + dest_lang + ".yml"
+                    )
                 apply_diff_one_file(
                     abs_path,
                     dest_file_path,
@@ -182,7 +185,7 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
                 )
     # Export lines to translate
     if len(lines_to_translate) > 0:
-        dir_to_translate = os.path.join(current_dir, "..", DIR_TO_TRANSLATE)
+        dir_to_translate = os.path.join(current_dest_dir, "..", DIR_TO_TRANSLATE)
         os.makedirs(dir_to_translate, exist_ok=True)
         with open(
             os.path.join(dir_to_translate, f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml"),
@@ -192,18 +195,33 @@ def apply_diff_all_eu_hoi_stellaris(old_dir, current_dir, source_lang, dest_lang
             f.writelines(lines_to_translate)
 
 
+def apply_diff_all_old_formats(old_dir, current_dir, source_lang, dest_lang, keys_to_ignore):
+    """
+    Apply diff for all files for old EUIV, HoI4 or Stellaris localisation format
+    :param old_dir: Directory with source Paradox files for previous version
+    :param current_dir: Directory with source and destination Paradox files for new version
+    :param source_lang: Source language
+    :param dest_lang: Destination language
+    :param keys_to_ignore: List of keys to ignore
+    :return:
+    """
+    return apply_diff_all(old_dir, current_dir, current_dir, source_lang, dest_lang, keys_to_ignore)
+
+
 if __name__ == "__main__":
     args = get_args()
-    if (args.source_lang is None) and (args.dir_lang is None):
-        print("Not yet implemented!")
-    else:
-        answer = input(f"Do want apply diff with {args.old_source_dir} as old source directory ? [y/N]")
-        if answer.lower() == "y":
-            if args.keys_to_ignore is None:
-                keys_to_ignore = []
-            else:
-                with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
-                    keys_to_ignore = [line.replace("\n", "") for line in f.readlines()]
-            apply_diff_all_eu_hoi_stellaris(
+    answer = input(f"Do want apply diff with {args.old_source_dir} as old source directory ? [y/N]")
+    if answer.lower() == "y":
+        if args.keys_to_ignore is None:
+            keys_to_ignore = []
+        else:
+            with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
+                keys_to_ignore = [line.replace("\n", "") for line in f.readlines()]
+        if (args.source_lang is None) and (args.dest_lang is None):
+            source_lang = args.source_dir.split("\\")[-1]
+            dest_lang = args.dest_dir.split("\\")[-1]
+            apply_diff_all(args.old_source_dir, args.source_dir, args.dest_dir, source_lang, dest_lang, keys_to_ignore)
+        else:
+            apply_diff_all_old_formats(
                 args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
             )

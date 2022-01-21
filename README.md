@@ -89,10 +89,21 @@ python src/add_missing_lines.py "<...>\localisation" "<...>\localisation" -sourc
 
 > Apply the differences between an old source version and a current source version to your current destination files.
 
-#### For Imperator Rome and sooner
-Not yet implemented
+#### For Imperator Rome and sooner, and new EUIV, HoI4 or Stellaris localisation format (a subdirectory for each language)
+```
+python src/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> 
+```
 
-#### For EUIV, HoI4 or Stellaris
+* <old_localisation_dir> contains the localisation of the old source version
+* <current_source_localisation_dir> contains the localisation of the new source version
+* <current_dest_localisation_dir> contains the localisation of the old destination version
+
+Example to apply in French files the modifications done in English
+```
+python src/apply_diff_all.py "<...>\V1\localisation\english" "<...>\V2\localisation\english" -dest_dir "<...>\V1\localisation\french"
+```
+
+#### For old EUIV, HoI4 or Stellaris localisation format (all files in the same directory)
 ```
 python src/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang>
 ```
@@ -104,6 +115,8 @@ Example to apply in French files the modifications done in English
 ```
 python src/apply_diff_all.py "<...>\V1\localisation" "<...>\V2\localisation" -source_lang english -dest_lang french
 ```
+
+#### Both format
 
 The destination files are overriden so don't hesitate to have a backup before running this.
 
