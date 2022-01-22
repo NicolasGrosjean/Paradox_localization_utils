@@ -4,7 +4,7 @@ import os
 import shutil
 
 from tests.utils import get_data_dir
-from src.apply_diff_all import DIR_TO_TRANSLATE, FILE_TO_TRANSLATE_PREFIX, apply_diff_all_eu_hoi_stellaris
+from src.apply_diff_all import DIR_TO_TRANSLATE, FILE_TO_TRANSLATE_PREFIX, apply_diff_all_old_formats
 
 
 class TestApplyDiffAll(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestApplyDiffAll(unittest.TestCase):
         cls.data_dir = os.path.join(get_data_dir(), "apply_diff_all")
         for file in os.listdir(os.path.join(cls.data_dir, "dest")):
             shutil.copyfile(os.path.join(cls.data_dir, "dest", file), os.path.join(cls.data_dir, "new", file))
-        apply_diff_all_eu_hoi_stellaris(
+        apply_diff_all_old_formats(
             os.path.join(cls.data_dir, "old"), os.path.join(cls.data_dir, "new"), "english", "french", ["KEYTOIGNORE"]
         )
 
@@ -164,7 +164,7 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(lines[4].replace("\n", ""), "  # Events")
         self.assertEqual(lines[5].replace("\n", ""), '  KEY141:2 "valeur1"')
 
-    def test_lines_to_translatest(self):
+    def test_lines_to_translate(self):
         file_to_translate = os.path.join(self.data_dir, DIR_TO_TRANSLATE, f"{FILE_TO_TRANSLATE_PREFIX}_l_english.yml")
         self.assertTrue(os.path.exists(file_to_translate), f"{file_to_translate} doesn't exist")
         with open(os.path.abspath(file_to_translate), "r", encoding="utf8") as f:
