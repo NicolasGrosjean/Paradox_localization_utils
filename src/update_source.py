@@ -33,7 +33,7 @@ def get_localisation_dir(mod_dir, source_lang):
 
 def main(args):
     # Compute unzip mod directory
-    copied_mod_dir = os.path.join(os.path.join(args.target_dir, "..", strftime("%Y_%m_%d_%H_%M_%S", gmtime())))
+    copied_mod_dir = os.path.join(args.target_dir, "..", strftime("%Y_%m_%d_%H_%M_%S", gmtime()))
     os.makedirs(copied_mod_dir)
 
     # Copy localisation directory
