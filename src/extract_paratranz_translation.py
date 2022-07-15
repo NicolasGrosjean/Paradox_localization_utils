@@ -57,10 +57,10 @@ if __name__ == "__main__":
     for root, _, files in os.walk(args.paratranz_dir):
         for file in files:
             if file.endswith(".json"):
-                if "_l_" not in file:
-                    print(f"_l_ not in {file}")
+                if "l_" not in file:
+                    print(f"l_ not in {file}")
                     continue
-                loc_file_name = file[: file.index("_l_")] + "_l_" + args.language + ".yml"
+                loc_file_name = file[: file.index("l_")] + "l_" + args.language + ".yml"
                 abs_path = os.path.abspath(os.path.join(root, loc_file_name))
                 rel_path = abs_path.replace(args.paratranz_dir, "")[1:]
                 extract_paratranz_localisation(
