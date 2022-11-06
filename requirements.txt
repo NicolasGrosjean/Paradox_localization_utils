@@ -1,4 +1,5 @@
 pandas
 python-levenshtein
+requests
 black
 flake8

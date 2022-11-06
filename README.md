@@ -60,6 +60,24 @@ Example to update the English files of the HoI4 mod Kaiserreich
 python src/update_source.py <...>\Steam\steamapps\workshop\content\394360\1521695605 <...>\GitHub\Traduction-FR-Kaiserreich\Traduction-FR-Kaiserreich english
 ```
 
+### Update Paratranz
+
+> Update files to translate on Paratranz
+
+Get your Paratranz API token in the settings tab of your Paratranz profile.
+
+Get the Paratranz project id by open the project and see the number in the url.
+
+```
+python src/update_paratranz.py <token> <project_id> <loc_dir> <language>
+```
+
+Example to update the RICE project (translation from English) on Paratranz
+
+```
+python src/update_paratranz.py <token> 2617 <...>\GitHub\RICE-for-CK3\RICE\localization english
+```
+
 ### Add missing lines
 
 > Add in the destination files the lines which are missing from the source ones
