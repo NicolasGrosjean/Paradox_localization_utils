@@ -37,7 +37,7 @@ def get_project_files(project_id: int):
     return {file["name"]: file["id"] for file in r.json()}
 
 
-def create_or_update_file(token: str, project_id: int, filepath: str, file_id=None):
+def create_or_update_file(token: str, project_id: int, filepath: str, file_relative_path: str, file_id=None):
     headers = {"Authorization": token}
     url = f"https://paratranz.cn/api/projects/{project_id}/files"
     if file_id is not None:
@@ -45,6 +45,7 @@ def create_or_update_file(token: str, project_id: int, filepath: str, file_id=No
     r = requests.post(
         url,
         headers=headers,
+        data={"path": os.path.dirname(file_relative_path)},
         files={"file": open(filepath, "rb")},
     )
     manage_request_error(r)
@@ -53,10 +54,19 @@ def create_or_update_file(token: str, project_id: int, filepath: str, file_id=No
 if __name__ == "__main__":
     args = get_args()
     current_files = get_project_files(args.project_id)
-    for root, _, files in os.walk(args.loc_dir):
+    for root, _, files in os.walk(os.path.join(args.loc_dir, args.language)):
         for file in files:
+            file_relative_path = os.path.join(root, file).replace(f"{args.loc_dir}\\{args.language}\\", "")
             if file.endswith(f"{args.language}.yml"):
-                if file in current_files:
-                    create_or_update_file(args.token, args.project_id, os.path.join(root, file), current_files[file])
+                if file_relative_path.replace("\\", "/") in current_files:
+                    print(f"Update file {file_relative_path}")
+                    create_or_update_file(
+                        args.token,
+                        args.project_id,
+                        os.path.join(root, file),
+                        file_relative_path,
+                        current_files[file_relative_path.replace("\\", "/")],
+                    )
                 else:
-                    create_or_update_file(args.token, args.project_id, os.path.join(root, file))
+                    print(f"Create file {file_relative_path}")
+                    create_or_update_file(args.token, args.project_id, os.path.join(root, file), file_relative_path)
