@@ -5,6 +5,9 @@
 *.spec
 *.log
 dist/
+build/
+update_paratranz/*
+!update_paratranz/update_paratranz.bat
 tests/data/extract_existing_translation/target/*
 !tests/data/extract_existing_translation/target/.gitkeep
 tests/data/extract_paratranz_translation/target/*

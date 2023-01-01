@@ -78,6 +78,13 @@ Example to update the RICE project (translation from English) on Paratranz
 python src/update_paratranz.py <token> 2617 <...>\GitHub\RICE-for-CK3\RICE\localization english
 ```
 
+To compile the code, run the following command
+```
+python compile_update_paratranz.py build
+```
+
+then put the dist/ directory in update_paratranz/
+
 ### Add missing lines
 
 > Add in the destination files the lines which are missing from the source ones
