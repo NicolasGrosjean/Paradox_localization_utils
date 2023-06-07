@@ -6,6 +6,13 @@
         "--max-line-length=119",
         "--extend-ignore=E501,E203, E402"
     ],
+    "files.exclude": {
+        "**/.idea": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/test-reports": true,
+        "**/*.pyc": true,
+    }, 
     "python.testing.unittestArgs": [
         "-v",
         "-s",
