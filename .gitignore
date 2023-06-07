@@ -4,6 +4,9 @@
 *.exe
 *.spec
 *.log
+.coverage
+coverage.xml
+report.xml
 dist/
 build/
 update_paratranz/*

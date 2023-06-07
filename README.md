@@ -1,5 +1,6 @@
 [![Build Status](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml/badge.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
-[![Coverage](https://raw.githubusercontent.com/NicolasGrosjean/Paradox_localization_utils/actions/badges/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+[![Tests](badges/tests.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
+[![Coverage](badges/coverage.svg)](https://github.com/NicolasGrosjean/Paradox_localization_utils/actions/workflows/flake8_test_coverage.yml)
 
 # Paradox localization utils
 
@@ -44,7 +45,13 @@ Install pandas package (only needed for *extract_existing_translation*)
 pip install pandas
 ```
 
-Install pre-commit (only for contributing)
+Install coverage tool (only need for contributing to the project)
+```
+pip install pytest coverage genbadge[all]
+```
+Copy the file `coverage.bat` in the folder `.git/hooks/` and name it `pre-commit` (it is normal there is no `.bat`).
+
+Install pre-commit (only need for contributing to the project)
 ```
 pip install pre-commit
 pre-commit install
