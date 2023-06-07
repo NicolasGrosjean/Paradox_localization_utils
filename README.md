@@ -44,6 +44,12 @@ Install pandas package (only needed for *extract_existing_translation*)
 pip install pandas
 ```
 
+Install pre-commit (only for contributing)
+```
+pip install pre-commit
+pre-commit install
+```
+
 ## Usage
 
 ### Update source
