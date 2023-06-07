@@ -32,7 +32,7 @@ class TestExtractExistingTranslation(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "l_french:")
         self.assertEqual(lines[1].replace("\n", ""), '  KEY0:0 "value0"')
-        self.assertEqual(lines[2].replace("\n", ""), ' KEY1:0 "valeur1"')
+        self.assertEqual(lines[2].replace("\n", ""), ' KEY1: "valeur1"')
 
     def test_extract_existing_hoi4_translations(self):
         extract_existing_translation(
@@ -50,5 +50,5 @@ class TestExtractExistingTranslation(unittest.TestCase):
         ) as f:
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "l_french:")
-        self.assertEqual(lines[1].replace("\n", ""), ' KEY0:0 "valeur0"')
+        self.assertEqual(lines[1].replace("\n", ""), ' KEY0: "valeur0"')
         self.assertEqual(lines[2].replace("\n", ""), '  KEY1:2 "value1"')
