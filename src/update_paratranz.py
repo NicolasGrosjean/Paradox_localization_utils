@@ -54,7 +54,7 @@ def create_or_update_file(token: str, project_id: int, filepath: str, file_relat
 if __name__ == "__main__":
     args = get_args()
     current_files = get_project_files(args.project_id)
-    print(f"Version of the software : 3rd January 2023")
+    print("Version of the software : 3rd January 2023")
     print(f"Update_paratranz on {os.path.join(args.loc_dir, args.language)}")
     for root, _, files in os.walk(os.path.join(args.loc_dir, args.language)):
         for file in files:

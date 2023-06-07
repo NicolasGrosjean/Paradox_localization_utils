@@ -3,6 +3,7 @@ import os
 import pandas as pd
 
 import sys
+
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from src.read_localization_file import file_to_keys_and_values, get_key_value_and_version, BadLocalizationException
 

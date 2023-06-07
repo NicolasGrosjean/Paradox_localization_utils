@@ -169,7 +169,9 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
                 if rel_path in rel_to_dest_abs_path:
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
-                    dest_file_path = abs_path.replace(current_src_dir,  current_dest_dir).replace(source_lang + ".yml", dest_lang + ".yml")
+                    dest_file_path = abs_path.replace(current_src_dir, current_dest_dir).replace(
+                        source_lang + ".yml", dest_lang + ".yml"
+                    )
                 apply_diff_one_file(
                     abs_path,
                     dest_file_path,
