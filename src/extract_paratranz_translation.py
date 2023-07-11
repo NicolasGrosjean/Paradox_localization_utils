@@ -59,7 +59,7 @@ def extract_paratranz_localisation_dir(
                 if "l_" not in file:
                     print(f"l_ not in {file}")
                     continue
-                loc_file_name = file[: file.index("l_")] + "l_" + language + ".yml"
+                loc_file_name = file[: file.rindex("l_")] + "l_" + language + ".yml"
                 abs_path = os.path.abspath(os.path.join(root, loc_file_name))
                 rel_path = abs_path.replace(paratranz_dir, "")[1:]
                 extract_paratranz_localisation(
