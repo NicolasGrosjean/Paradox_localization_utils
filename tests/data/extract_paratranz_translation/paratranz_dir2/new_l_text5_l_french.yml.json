@@ -1,0 +1,18 @@
+[
+ {
+  "id": 67003372,
+  "key": "KEY0:0",
+  "original": "value0",
+  "translation": "valeur0",
+  "stage": 5,
+  "context": null
+ },
+ {
+  "id": 67003373,
+  "key": "KEY2:0",
+  "original": "value2",
+  "translation": "valeur2",
+  "stage": 5,
+  "context": null
+ }
+]

@@ -50,20 +50,26 @@ def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_p
                     continue
 
 
-if __name__ == "__main__":
-    args = get_args()
-    extract_not_review = args.extract_not_review
-    if extract_not_review is None:
-        extract_not_review = False
-    for root, _, files in os.walk(args.paratranz_dir):
+def extract_paratranz_localisation_dir(
+    paratranz_dir: str, language: str, localisation_dir: str, extract_not_review: bool
+):
+    for root, _, files in os.walk(paratranz_dir):
         for file in files:
             if file.endswith(".json"):
                 if "l_" not in file:
                     print(f"l_ not in {file}")
                     continue
-                loc_file_name = file[: file.index("l_")] + "l_" + args.language + ".yml"
+                loc_file_name = file[: file.index("l_")] + "l_" + language + ".yml"
                 abs_path = os.path.abspath(os.path.join(root, loc_file_name))
-                rel_path = abs_path.replace(args.paratranz_dir, "")[1:]
+                rel_path = abs_path.replace(paratranz_dir, "")[1:]
                 extract_paratranz_localisation(
-                    os.path.join(root, file), os.path.join(args.localisation_dir, rel_path), extract_not_review
+                    os.path.join(root, file), os.path.join(localisation_dir, rel_path), extract_not_review
                 )
+
+
+if __name__ == "__main__":
+    args = get_args()
+    extract_not_review = args.extract_not_review
+    if extract_not_review is None:
+        extract_not_review = False
+    extract_paratranz_localisation_dir(args.paratranz_dir, args.language, args.localisation_dir, extract_not_review)

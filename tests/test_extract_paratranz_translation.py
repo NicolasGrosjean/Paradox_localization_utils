@@ -2,7 +2,7 @@ import os
 import shutil
 import unittest
 
-from src.extract_paratranz_translation import extract_paratranz_localisation
+from src.extract_paratranz_translation import extract_paratranz_localisation, extract_paratranz_localisation_dir
 from tests.utils import get_data_dir
 
 
@@ -106,5 +106,25 @@ class TestExtractParatranzTranslation(unittest.TestCase):
             lines = f.readlines()
         self.assertEqual(lines[0].replace("\n", ""), "l_french:")
         self.assertEqual(lines[1].replace("\n", ""), '  KEY0:0 "value0"')
+        self.assertEqual(lines[2].replace("\n", ""), '  KEY1:0 "value1"')
+        self.assertEqual(lines[3].replace("\n", ""), ' KEY2:0 "valeur2"')
+
+    def test_extract_paratranz_translation_with_l(self):
+        shutil.copyfile(
+            os.path.join(self.data_dir, "original", "text_l_french.yml"),
+            os.path.join(self.data_dir, "target", "new_l_text5_l_french.yml"),
+        )
+        extract_paratranz_localisation_dir(
+            os.path.abspath(os.path.join(self.data_dir, "paratranz_dir2")),
+            "french",
+            self.localisation_dir,
+            False,
+        )
+        with open(
+            os.path.abspath(os.path.join(self.data_dir, "target", "new_l_text5_l_french.yml")), "r", encoding="utf8"
+        ) as f:
+            lines = f.readlines()
+        self.assertEqual(lines[0].replace("\n", ""), "l_french:")
+        self.assertEqual(lines[1].replace("\n", ""), ' KEY0:0 "valeur0"')
         self.assertEqual(lines[2].replace("\n", ""), '  KEY1:0 "value1"')
         self.assertEqual(lines[3].replace("\n", ""), ' KEY2:0 "valeur2"')
