@@ -1,7 +1,8 @@
 import argparse
-import json
 import os
 import requests
+
+from utils import manage_request_error
 
 
 def get_args():
@@ -13,22 +14,6 @@ def get_args():
     )
     parser.add_argument("language", type=str, help="Source language to send only files with this suffix")
     return parser.parse_args()
-
-
-def manage_request_error(r: requests.models.Response):
-    if r.status_code != 200:
-        try:
-            error = json.loads(r._content.decode())
-        except json.decoder.JSONDecodeError:
-            print(r._content.decode())
-            r.raise_for_status()
-        if "message" in error:
-            print(error["message"])
-        elif "detail" in error:
-            print(error["detail"])
-        else:
-            print(error)
-        r.raise_for_status()
 
 
 def get_project_files(project_id: int):
@@ -56,6 +41,7 @@ if __name__ == "__main__":
     current_files = get_project_files(args.project_id)
     print("Version of the software : 3rd January 2023")
     print(f"Update_paratranz on {os.path.join(args.loc_dir, args.language)}")
+    # TODO : Manage "replace" and other directories
     for root, _, files in os.walk(os.path.join(args.loc_dir, args.language)):
         for file in files:
             file_relative_path = os.path.join(root, file).replace(f"{args.loc_dir}\\{args.language}\\", "")

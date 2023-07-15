@@ -98,6 +98,18 @@ python compile_update_paratranz.py build
 
 then put the dist/ directory in update_paratranz/
 
+### Download from Paratranz
+
+> Download translated files from Paratranz
+
+Get your Paratranz API token in the settings tab of your Paratranz profile.
+
+Get the Paratranz project id by open the project and see the number in the url.
+
+```
+python src/download_paratranz.py <token> <project_id> <raw_dir_path> <utf8_dir_path>
+```
+
 ### Add missing lines
 
 > Add in the destination files the lines which are missing from the source ones
