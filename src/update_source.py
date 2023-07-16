@@ -23,10 +23,15 @@ def list_file_to_copy(target_mod_dir):
 def get_localisation_dir(mod_dir, source_lang):
     hoi4_loc_dir = os.path.join(mod_dir, "localisation")
     ck3_loc_dir = os.path.join(mod_dir, "localization", source_lang)
+    ck3_replace_loc_dir = os.path.join(mod_dir, "localization", "replace", source_lang)
     if os.path.exists(hoi4_loc_dir):
         return hoi4_loc_dir
     elif os.path.exists(ck3_loc_dir):
         return ck3_loc_dir
+    elif os.path.exists(ck3_replace_loc_dir):
+        return ck3_replace_loc_dir
+    elif source_lang in mod_dir:
+        return mod_dir
     else:
         raise Exception("Localisation directory not found")
 
