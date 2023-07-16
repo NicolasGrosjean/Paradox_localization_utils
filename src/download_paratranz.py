@@ -73,7 +73,7 @@ def move_files(source_dir: str, dest_dir: str):
     :param source_dir: Directory to move
     :param dest_dir: Destination directory
     """
-    if not os.path.exists(dest_dir):
+    if os.path.exists(dest_dir):
         shutil.rmtree(dest_dir)
     shutil.move(source_dir, dest_dir)
 
