@@ -25,13 +25,23 @@ class TestCopyOnOtherLanguages(unittest.TestCase):
         self.assertEqual(lines[0].replace("\n", ""), "\ufeffl_french:")
         self.assertEqual(lines[1].replace("\n", ""), '  KEY:0 "valeur0"')
         self.assertEqual(lines[2].replace("\n", ""), '  ANOTHERKEY:0 "valeur42"')
-        for language in ["english", "german", "korean"]:
-            with open(
-                os.path.abspath(os.path.join(self.data_dir, "sandbox", language, f"text_l_{language}.yml")),
-                "r",
-                encoding="utf8",
-            ) as f:
-                lines = f.readlines()
-            self.assertEqual(lines[0].replace("\n", ""), f"\ufeffl_{language}:")
-            self.assertEqual(lines[1].replace("\n", ""), '  KEY:0 "value0"')
-            self.assertEqual(lines[2].replace("\n", ""), '  ANOTHERKEY:0 "value42"')
+        for suffix in ["", "2"]:
+            for language in ["english", "german", "korean"]:
+                with open(
+                    os.path.abspath(
+                        os.path.join(self.data_dir, "sandbox", language, f"text{suffix}_l_{language}.yml")
+                    ),
+                    "r",
+                    encoding="utf8",
+                ) as f:
+                    lines = f.readlines()
+                i = 0
+                if suffix == "2":
+                    self.assertEqual(lines[0].replace("\n", ""), "\ufeff# Comment in the first line")
+                    self.assertEqual(lines[1].replace("\n", ""), "")
+                    self.assertEqual(lines[2].replace("\n", ""), f"l_{language}:")
+                    i = 2
+                else:
+                    self.assertEqual(lines[0].replace("\n", ""), f"\ufeffl_{language}:")
+                self.assertEqual(lines[i + 1].replace("\n", ""), '  KEY:0 "value0"')
+                self.assertEqual(lines[i + 2].replace("\n", ""), '  ANOTHERKEY:0 "value42"')

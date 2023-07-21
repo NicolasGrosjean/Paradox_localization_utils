@@ -32,9 +32,16 @@ def copy_on_other_languages(localisation_dir, source_lang, dest_langs):
                 with open(
                     os.path.join(root, file.replace(f"{source_lang}.yml", f"{dest_lang}.yml")), "w", encoding="utf-8"
                 ) as f:
-                    f.write(f"\ufeffl_{dest_lang}:\n")
-                    for i in range(1, len(lines)):
+                    i = 0
+                    while f"l_{source_lang}:" not in lines[i]:
                         f.write(lines[i])
+                        i += 1
+                    if i == 0:
+                        bom_or_not = "\ufeff"
+                    else:
+                        bom_or_not = ""
+                    f.write(f"{bom_or_not}l_{dest_lang}:\n")
+                    f.writelines(lines[i + 1 :])
                 os.remove(os.path.join(root, file))
 
 
