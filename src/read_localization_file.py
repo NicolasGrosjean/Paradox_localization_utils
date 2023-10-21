@@ -6,6 +6,8 @@ def file_to_keys_and_values(absolute_file_path):
     """
     with open(absolute_file_path, "r", encoding="utf8") as f:
         lines = f.readlines()
+    if len(lines) == 0:
+        return dict(), ""
     res = dict()
     for i in range(len(lines)):
         try:
