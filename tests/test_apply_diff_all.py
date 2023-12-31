@@ -4,7 +4,7 @@ import os
 import shutil
 
 from tests.utils import get_data_dir
-from src.apply_diff_all import DIR_TO_TRANSLATE, FILE_TO_TRANSLATE_PREFIX, apply_diff_all_old_formats
+from src.apply_diff_all import DIR_TO_TRANSLATE, DIR_TO_UPDATE, FILE_TO_TRANSLATE_PREFIX, FILE_TO_UPDATE_DEST_PREFIX, FILE_TO_UPDATE_OLD_SOURCE_PREFIX, FILE_TO_UPDATE_SOURCE_PREFIX, apply_diff_all_old_formats
 
 
 class TestApplyDiffAll(unittest.TestCase):
@@ -32,8 +32,12 @@ class TestApplyDiffAll(unittest.TestCase):
             if file.endswith("l_french.yml"):
                 os.remove(os.path.join(cls.data_dir, "new", file))
         file_to_translate = os.path.join(cls.data_dir, DIR_TO_TRANSLATE, f"{FILE_TO_TRANSLATE_PREFIX}_l_english.yml")
-        if os.path.exists(file_to_translate):
-            os.remove(file_to_translate)
+        old_source = os.path.join(cls.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_english.yml")
+        source = os.path.join(cls.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_english.yml")
+        dest = os.path.join(cls.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_DEST_PREFIX}_l_french.yml")
+        for file in [file_to_translate, old_source, source, dest]:
+            if os.path.exists(file):
+                os.remove(file)
 
     def test_apply_diff_same_sources(self):
         with open(os.path.abspath(os.path.join(self.data_dir, "new", "0_l_french.yml")), "r", encoding="utf8") as f:
@@ -180,3 +184,20 @@ class TestApplyDiffAll(unittest.TestCase):
         self.assertEqual(len(expected_lines), len(lines) - 1)
         for line in expected_lines:
             self.assertTrue(line in lines, f"{line} not found in {file_to_translate}")
+
+    def test_lines_to_update(self):
+        old_source = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_english.yml")
+        source = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_english.yml")
+        dest = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_DEST_PREFIX}_l_english.yml")
+        expected_first_line = ["\ufeffl_english:", "\ufeffl_english:", "\ufeffl_french:"]
+        expected_lines = [[' KEY60:9 "value0"\n'], [' KEY60:9 "value42"\n'], [' KEY60:9 "valeur0"\n']]
+        i = 0
+        for file in [old_source, source, dest]:
+            self.assertTrue(os.path.exists(file), f"{file} doesn't exist")
+            with open(os.path.abspath(file), "r", encoding="utf8") as f:
+                lines = f.readlines()
+            self.assertEqual(lines[0].replace("\n", ""), expected_first_line[i])
+            self.assertEqual(len(expected_lines[i]), len(lines) - 1)
+            for line in expected_lines[i]:
+                self.assertTrue(line in lines, f"{line} not found in {file}")
+            i += 1

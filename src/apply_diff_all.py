@@ -14,6 +14,10 @@ from src.read_localization_file import (
 
 DIR_TO_TRANSLATE = "to_translate"
 FILE_TO_TRANSLATE_PREFIX = "file_to_translate"
+DIR_TO_UPDATE = "to_update"
+FILE_TO_UPDATE_OLD_SOURCE_PREFIX = "old_source"
+FILE_TO_UPDATE_SOURCE_PREFIX = "source"
+FILE_TO_UPDATE_DEST_PREFIX = "dest"
 
 
 def get_args():
@@ -55,6 +59,9 @@ def apply_diff_one_file(
     source_lang,
     existing_translations,
     lines_to_translate,
+    lines_to_update_old_source,
+    lines_to_update_source,
+    lines_to_update_dest,
     keys_to_ignore,
 ):
     with open(source_file_path, "r", encoding="utf8") as f:
@@ -102,6 +109,10 @@ def apply_diff_one_file(
                             # we keep translation but change version number
                             # OR translation if already translated elsewhere
                             write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations, None)
+                            if value not in existing_translations:
+                                lines_to_update_old_source.append(" " + key + ':9 "' + old_source_values[key]["value"] + '"\n')
+                                lines_to_update_source.append(" " + key + ':9 "' + value + '"\n')
+                                lines_to_update_dest.append(" " + key + ':9 "' + dest_text + '"\n')
                         else:
                             # Add current source text because the previous destination was not translated
                             # OR translation if already translated elsewhere
@@ -160,6 +171,10 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
             existing_translations[old_source_values[source_key]["value"]] = dest_values[source_key]["value"]
     # Store lines to translate
     lines_to_translate = [f"\ufeffl_{source_lang}:\n"]
+    # Store lines to update
+    lines_to_update_old_source = [f"\ufeffl_{source_lang}:\n"]
+    lines_to_update_source = [f"\ufeffl_{source_lang}:\n"]
+    lines_to_update_dest = [f"\ufeffl_{dest_lang}:\n"]
     # Apply diff with current source texts
     for root, _, files in os.walk(current_src_dir):
         for file in files:
@@ -181,18 +196,34 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
                     source_lang,
                     existing_translations,
                     lines_to_translate,
+                    lines_to_update_old_source,
+                    lines_to_update_source,
+                    lines_to_update_dest,
                     keys_to_ignore,
                 )
-    # Export lines to translate
-    if len(lines_to_translate) > 0:
-        dir_to_translate = os.path.join(current_dest_dir, "..", DIR_TO_TRANSLATE)
-        os.makedirs(dir_to_translate, exist_ok=True)
-        with open(
-            os.path.join(dir_to_translate, f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml"),
-            "w",
-            encoding="utf8",
-        ) as f:
-            f.writelines(lines_to_translate)
+    # Export lines to  and to update
+    lines_to_export = [lines_to_translate, lines_to_update_old_source, lines_to_update_source, lines_to_update_dest]
+    directories = [
+        os.path.join(current_dest_dir, "..", DIR_TO_TRANSLATE),
+        os.path.join(current_dest_dir, "..", DIR_TO_UPDATE),
+        os.path.join(current_dest_dir, "..", DIR_TO_UPDATE),
+        os.path.join(current_dest_dir, "..", DIR_TO_UPDATE)
+    ]
+    file_names = [
+        f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml",
+        f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_{source_lang}.yml",
+        f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_{source_lang}.yml",
+        f"{FILE_TO_UPDATE_DEST_PREFIX}_l_{source_lang}.yml"
+    ]
+    for i in range(len(lines_to_export)):
+        if len(lines_to_export[i]) > 0:
+            os.makedirs(directories[i], exist_ok=True)
+            with open(
+                os.path.join(directories[i], file_names[i]),
+                "w",
+                encoding="utf8",
+            ) as f:
+                f.writelines(lines_to_export[i])
 
 
 def apply_diff_all_old_formats(old_dir, current_dir, source_lang, dest_lang, keys_to_ignore):
