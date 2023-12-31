@@ -300,6 +300,21 @@ cd tests
 python -m unittest discover
 ```
 
+If some tests fails with error `ModuleNotFoundError: No module named 'src'`, run the following command in the root directory.
+
+
+On Windows:
+
+```
+set PYTHONPATH=%CD%
+```
+
+On Linux
+
+```
+export PYTHONPATH=${PYTHONPATH}:${PWD}
+```
+
 ## Run actions
 
 Th upload badge to GitHub action should have access to your GitHub repository. Strongly recommend store it in secrets. [Create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with the `repo` permission. [Create a secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) named `ACCESS_TOKEN` in your repository and copy access token to the secret value.
