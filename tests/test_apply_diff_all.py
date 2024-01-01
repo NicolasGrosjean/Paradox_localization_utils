@@ -188,7 +188,7 @@ class TestApplyDiffAll(unittest.TestCase):
     def test_lines_to_update(self):
         old_source = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_english.yml")
         source = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_english.yml")
-        dest = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_DEST_PREFIX}_l_english.yml")
+        dest = os.path.join(self.data_dir, DIR_TO_UPDATE, f"{FILE_TO_UPDATE_DEST_PREFIX}_l_french.yml")
         expected_first_line = ["\ufeffl_english:", "\ufeffl_english:", "\ufeffl_french:"]
         expected_lines = [[' KEY60:9 "value0"\n'], [' KEY60:9 "value42"\n'], [' KEY60:9 "valeur0"\n']]
         i = 0
