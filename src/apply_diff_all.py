@@ -213,7 +213,7 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
         f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml",
         f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_{source_lang}.yml",
         f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_{source_lang}.yml",
-        f"{FILE_TO_UPDATE_DEST_PREFIX}_l_{source_lang}.yml"
+        f"{FILE_TO_UPDATE_DEST_PREFIX}_l_{dest_lang}.yml"
     ]
     for i in range(len(lines_to_export)):
         if len(lines_to_export[i]) > 0:
