@@ -1,4 +1,5 @@
 import argparse
+import shutil
 import Levenshtein
 import os
 
@@ -253,9 +254,16 @@ if __name__ == "__main__":
             with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
                 keys_to_ignore = [line.replace("\n", "") for line in f.readlines()]
         if (args.source_lang is None) and (args.dest_lang is None):
-            source_lang = args.source_dir.split("\\")[-1]
-            dest_lang = args.dest_dir.split("\\")[-1]
+            # source_lang = args.source_dir.split("\\")[-1]
+            # dest_lang = args.dest_dir.split("\\")[-1]
+            source_lang = "english"
+            dest_lang = "french"
             apply_diff_all(args.old_source_dir, args.source_dir, args.dest_dir, source_lang, dest_lang, keys_to_ignore)
+            for root, _, files in os.walk(os.path.join(args.dest_dir, source_lang)):
+                dest_dir = root.replace(os.path.join(args.dest_dir, source_lang), os.path.join(args.dest_dir, dest_lang))
+                for file in files:
+                    if dest_lang in file:
+                        shutil.move(os.path.join(root, file), os.path.join(dest_dir, file))
         else:
             apply_diff_all_old_formats(
                 args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
