@@ -1,2 +1,19 @@
 [tool.black]
 line-length = 119
+
+[tool.poetry]
+name = "paradox-localization-utils"
+version = "0.1.0"
+description = "Utilitaries on Paradox localisation files"
+authors = ["NicolasGrosjean <grosjen@hotmail.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+joblib = "^1.4.2"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

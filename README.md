@@ -15,7 +15,13 @@ Example : If I translate from English to French, the source directory refers to 
 
 ## Installation
 
-I recommend you to install a Python environment with conda, virtualenv or pipenv.
+I recommend you to install a Python environment with poetry, conda, virtualenv or pipenv.
+
+##### Poetry
+
+```
+poetry install
+```
 
 ##### Conda
 For example with conda, 
