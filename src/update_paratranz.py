@@ -77,7 +77,7 @@ if __name__ == "__main__":
     for root, _, files in os.walk(os.path.join(args.loc_dir, args.language)):
         for file in files:
             all_files.append(os.path.join(root, file))
-    Parallel(n_jobs=args.parallel_nb, backend="multiprocessing")(
+    Parallel(n_jobs=args.parallel_nb, backend="threading")(
         delayed(create_or_update_file)(args.token, args.project_id, args.loc_dir, args.language, file_path, current_files)
         for file_path in all_files)
     print(f"Total time of the execution: {compute_time(start)}")
