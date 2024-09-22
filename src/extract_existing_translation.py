@@ -83,7 +83,7 @@ def insert_text(file_path, extracted_translation, target_source_files):
                         )
                     target_source_text = target_source_files[key]["value"]
                     if target_source_text in extracted_translation:
-                        f.write(" " + key + ': "' + extracted_translation[target_source_text] + '"\n')           
+                        f.write(" " + key + ': "' + extracted_translation[target_source_text] + '"\n')
                     else:
                         f.write(lines[i])
                 except BadLocalizationException:

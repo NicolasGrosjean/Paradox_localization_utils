@@ -19,6 +19,7 @@ def manage_request_error(r: requests.models.Response):
             print(error)
         r.raise_for_status()
 
+
 def compute_time(start_time: float) -> str:
     end = time.time()
     return str(datetime.timedelta(seconds=end - start_time))

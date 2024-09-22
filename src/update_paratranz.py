@@ -15,7 +15,7 @@ def get_args():
         "loc_dir", type=str, help="Path of the localisation directory which will be browse recursively"
     )
     parser.add_argument("language", type=str, help="Source language to send only files with this suffix")
-    parser.add_argument("-parallel_nb", type=int, help="Number of parallel tasks",default=-1)
+    parser.add_argument("-parallel_nb", type=int, help="Number of parallel tasks", default=-1)
     return parser.parse_args()
 
 
@@ -25,7 +25,9 @@ def get_project_files(project_id: int):
     return {file["name"]: file["id"] for file in r.json()}
 
 
-def create_or_update_file(token: str, project_id: int, loc_dir: str, language: str, file_path: str, current_files: list):
+def create_or_update_file(
+    token: str, project_id: int, loc_dir: str, language: str, file_path: str, current_files: list
+):
     file_relative_path = file_path.replace(f"{loc_dir}\\{language}\\", "")
     if file_path.endswith(f"{language}.yml"):
         if file_relative_path.replace("\\", "/") in current_files:
@@ -55,7 +57,7 @@ def __create_or_update_file(token: str, project_id: int, filepath: str, file_rel
             files={"file": open(filepath, "rb")},
         )
         manage_request_error(r)
-    except:
+    except requests.HTTPError:
         print(f"Fail to create/update {filepath}, retry in 2 seconds")
         time.sleep(2)
         r = requests.post(
@@ -78,6 +80,9 @@ if __name__ == "__main__":
         for file in files:
             all_files.append(os.path.join(root, file))
     Parallel(n_jobs=args.parallel_nb, backend="threading")(
-        delayed(create_or_update_file)(args.token, args.project_id, args.loc_dir, args.language, file_path, current_files)
-        for file_path in all_files)
+        delayed(create_or_update_file)(
+            args.token, args.project_id, args.loc_dir, args.language, file_path, current_files
+        )
+        for file_path in all_files
+    )
     print(f"Total time of the execution: {compute_time(start)}")
