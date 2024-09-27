@@ -19,8 +19,8 @@ I recommend you to install a Python environment with poetry, conda, virtualenv o
 
 ### Poetry
 
-```
 poetry install
+```shell
 ```
 
 #### Pre-commit (only need for contributing to the project)

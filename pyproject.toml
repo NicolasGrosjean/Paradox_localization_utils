@@ -19,6 +19,9 @@ python-levenshtein = "^0.26.0"
 pytest = "^8.3.3"
 pre-commit = "^3.8.0"
 pytest-cov = "^5.0.0"
+responses = "^0.25.3"
+pytest-mock = "^3.14.0"
+genbadge = {extras = ["all"], version = "^1.1.1"}
 
 [build-system]
 requires = ["poetry-core"]
