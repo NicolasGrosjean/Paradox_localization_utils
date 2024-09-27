@@ -4,7 +4,15 @@ import os
 import shutil
 
 from tests.utils import get_data_dir
-from src.apply_diff_all import DIR_TO_TRANSLATE, DIR_TO_UPDATE, FILE_TO_TRANSLATE_PREFIX, FILE_TO_UPDATE_DEST_PREFIX, FILE_TO_UPDATE_OLD_SOURCE_PREFIX, FILE_TO_UPDATE_SOURCE_PREFIX, apply_diff_all_old_formats
+from paradox_localization_utils.apply_diff_all import (
+    DIR_TO_TRANSLATE,
+    DIR_TO_UPDATE,
+    FILE_TO_TRANSLATE_PREFIX,
+    FILE_TO_UPDATE_DEST_PREFIX,
+    FILE_TO_UPDATE_OLD_SOURCE_PREFIX,
+    FILE_TO_UPDATE_SOURCE_PREFIX,
+    apply_diff_all_old_formats,
+)
 
 
 class TestApplyDiffAll(unittest.TestCase):

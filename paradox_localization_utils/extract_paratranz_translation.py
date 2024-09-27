@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
-from src.read_localization_file import get_key_value_and_version, BadLocalizationException
+from paradox_localization_utils.read_localization_file import get_key_value_and_version, BadLocalizationException
 
 
 def get_args():

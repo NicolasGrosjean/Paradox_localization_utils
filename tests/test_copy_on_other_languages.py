@@ -2,7 +2,7 @@ import os
 import shutil
 import unittest
 
-from src.copy_on_other_languages import copy_on_other_languages
+from paradox_localization_utils.copy_on_other_languages import copy_on_other_languages
 from tests.utils import get_data_dir
 
 

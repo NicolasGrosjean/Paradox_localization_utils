@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
-from src.read_localization_file import (
+from paradox_localization_utils.read_localization_file import (
     file_to_keys_and_lines,
     get_key_value_and_version,
     BadLocalizationException,
@@ -110,7 +110,9 @@ def apply_diff_one_file(
                             # OR translation if already translated elsewhere
                             write_new_line_or_get_existing_translation(f, key, dest_text, existing_translations, None)
                             if value not in existing_translations:
-                                lines_to_update_old_source.append(" " + key + ':9 "' + old_source_values[key]["value"] + '"\n')
+                                lines_to_update_old_source.append(
+                                    " " + key + ':9 "' + old_source_values[key]["value"] + '"\n'
+                                )
                                 lines_to_update_source.append(" " + key + ':9 "' + value + '"\n')
                                 lines_to_update_dest.append(" " + key + ':9 "' + dest_text + '"\n')
                         else:
@@ -131,11 +133,13 @@ def apply_diff_one_file(
             first_line = False
 
 
-def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest_lang, keys_to_ignore):
+def apply_diff_all(
+    old_dir, current_paradox_localization_utils_dir, current_dest_dir, source_lang, dest_lang, keys_to_ignore
+):
     """
     Apply diff for all files
     :param old_dir: Directory with source Paradox files for previous version
-    :param current_src_dir: Directory with source Paradox files for new version
+    :param current_paradox_localization_utils_dir: Directory with source Paradox files for new version
     :param current_dest_dir: Directory with destination Paradox files for new version
     :param source_lang: Source language
     :param dest_lang: Destination language
@@ -176,17 +180,17 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
     lines_to_update_source = [f"\ufeffl_{source_lang}:\n"]
     lines_to_update_dest = [f"\ufeffl_{dest_lang}:\n"]
     # Apply diff with current source texts
-    for root, _, files in os.walk(current_src_dir):
+    for root, _, files in os.walk(current_paradox_localization_utils_dir):
         for file in files:
             if file.endswith(source_lang + ".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
-                rel_path = abs_path[: abs_path.find("_l_")].replace(current_src_dir, "")
+                rel_path = abs_path[: abs_path.find("_l_")].replace(current_paradox_localization_utils_dir, "")
                 if rel_path in rel_to_dest_abs_path:
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
-                    dest_file_path = abs_path.replace(current_src_dir, current_dest_dir).replace(
-                        source_lang + ".yml", dest_lang + ".yml"
-                    )
+                    dest_file_path = abs_path.replace(
+                        current_paradox_localization_utils_dir, current_dest_dir
+                    ).replace(source_lang + ".yml", dest_lang + ".yml")
                 apply_diff_one_file(
                     abs_path,
                     dest_file_path,
@@ -207,13 +211,13 @@ def apply_diff_all(old_dir, current_src_dir, current_dest_dir, source_lang, dest
         os.path.join(current_dest_dir, "..", DIR_TO_TRANSLATE),
         os.path.join(current_dest_dir, "..", DIR_TO_UPDATE),
         os.path.join(current_dest_dir, "..", DIR_TO_UPDATE),
-        os.path.join(current_dest_dir, "..", DIR_TO_UPDATE)
+        os.path.join(current_dest_dir, "..", DIR_TO_UPDATE),
     ]
     file_names = [
         f"{FILE_TO_TRANSLATE_PREFIX}_l_{source_lang}.yml",
         f"{FILE_TO_UPDATE_OLD_SOURCE_PREFIX}_l_{source_lang}.yml",
         f"{FILE_TO_UPDATE_SOURCE_PREFIX}_l_{source_lang}.yml",
-        f"{FILE_TO_UPDATE_DEST_PREFIX}_l_{dest_lang}.yml"
+        f"{FILE_TO_UPDATE_DEST_PREFIX}_l_{dest_lang}.yml",
     ]
     for i in range(len(lines_to_export)):
         if len(lines_to_export[i]) > 0:

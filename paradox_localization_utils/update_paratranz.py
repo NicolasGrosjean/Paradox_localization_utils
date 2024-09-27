@@ -4,7 +4,7 @@ import os
 import requests
 import time
 
-from src.utils import compute_time, manage_request_error
+from paradox_localization_utils.utils import compute_time, manage_request_error
 
 
 def get_args():
@@ -47,11 +47,13 @@ def create_or_update_files(project_id: int, token: str, loc_dir: str, language: 
             print(file)
     print(f"Total time of the execution: {compute_time(start)}")
 
+
 def __assert_localisation_directory_format(loc_dir: str, language: str):
     if not os.path.isdir(loc_dir):
         raise ValueError(f"Directory {loc_dir} does not exist")
     if not os.path.isdir(os.path.join(loc_dir, language)):
         raise ValueError(f"Directory {os.path.join(loc_dir, language)} does not exist")
+
 
 def get_project_files(project_id: int) -> dict[str, int]:
     r = requests.get(f"https://paratranz.cn/api/projects/{project_id}/files")
@@ -69,7 +71,7 @@ def create_or_update_file(
     files_with_errors: list,
     sleeping_before_retry: int = 2,
 ):
-    file_relative_path = file_path.replace(f"{loc_dir}\\{language}\\", "")
+    file_relative_path = file_path.replace(f"{loc_dir}\\{language}\\", "").replace(f"{loc_dir}/{language}/", "")
     paratranz_path = os.path.dirname(file_relative_path)
     if file_path.endswith(f"{language}.yml"):
         try:

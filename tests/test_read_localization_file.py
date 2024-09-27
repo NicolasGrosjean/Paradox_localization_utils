@@ -1,7 +1,11 @@
 import unittest
 
 import os
-from src.read_localization_file import get_key_value_and_version, BadLocalizationException, file_to_keys_and_values
+from paradox_localization_utils.read_localization_file import (
+    get_key_value_and_version,
+    BadLocalizationException,
+    file_to_keys_and_values,
+)
 from tests.utils import get_data_dir
 
 

@@ -3,7 +3,7 @@ import unittest
 import os
 import shutil
 
-from src.apply_diff import apply_diff
+from paradox_localization_utils.apply_diff import apply_diff
 from tests.utils import get_data_dir
 
 

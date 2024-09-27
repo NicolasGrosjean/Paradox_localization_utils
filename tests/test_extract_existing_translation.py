@@ -2,7 +2,7 @@ import os
 import shutil
 import unittest
 
-from src.extract_existing_translation import extract_existing_translation
+from paradox_localization_utils.extract_existing_translation import extract_existing_translation
 from tests.utils import get_data_dir
 
 

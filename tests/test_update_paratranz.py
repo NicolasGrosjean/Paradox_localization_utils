@@ -5,7 +5,11 @@ from pytest_mock import MockerFixture
 import requests
 import responses
 
-from src.update_paratranz import create_or_update_file, create_or_update_files, get_project_files
+from paradox_localization_utils.update_paratranz import (
+    create_or_update_file,
+    create_or_update_files,
+    get_project_files,
+)
 from tests.utils import generate_random_str
 
 
@@ -139,7 +143,7 @@ def test_retry(project_id: int, token: str, language: str, empty_file: Path, tmp
             first_call = False
             raise requests.HTTPError()
 
-    mocker.patch("src.update_paratranz.__post_file_to_paratranz", new=raise_error_first_call)
+    mocker.patch("paradox_localization_utils.update_paratranz.__post_file_to_paratranz", new=raise_error_first_call)
     current_files = dict()
     files_with_errors = []
     create_or_update_file(token, project_id, tmp_path, language, str(empty_file), current_files, files_with_errors)
@@ -173,9 +177,13 @@ def test_create_or_update_files(project_id: int, token: str, language: str, tmp_
     update_mock = responses.post(f"https://paratranz.cn/api/projects/{project_id}/files/{file_id}")
     create_or_update_files(project_id, token, tmp_path, language, 1)
     assert create_mock.call_count == 3
-    expected_calls = [file_name1, file_name2, file_name3]
-    for i in range(create_mock.call_count):
-        assert expected_calls[i] in create_mock.calls[i].request.body.decode()
+    for call in create_mock.calls:
+        found = False
+        for file_name in [file_name1, file_name2, file_name3]:
+            if file_name in call.request.body.decode():
+                found = True
+                break
+        assert found
     assert subdir in create_mock.calls[-1].request.body.decode()
     assert update_mock.call_count == 1
     assert file_name4 in update_mock.calls[0].request.body.decode()

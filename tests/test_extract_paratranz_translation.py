@@ -2,7 +2,10 @@ import os
 import shutil
 import unittest
 
-from src.extract_paratranz_translation import extract_paratranz_localisation, extract_paratranz_localisation_dir
+from paradox_localization_utils.extract_paratranz_translation import (
+    extract_paratranz_localisation,
+    extract_paratranz_localisation_dir,
+)
 from tests.utils import get_data_dir
 
 

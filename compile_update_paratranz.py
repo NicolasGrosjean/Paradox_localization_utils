@@ -7,5 +7,5 @@ setup(
     version="0.1",
     description="Update translation on Paratranz",
     options={"build_exe": build_exe_options},
-    executables=[Executable("src/update_paratranz.py")],
+    executables=[Executable("paradox_localization_utils/update_paratranz.py")],
 )
