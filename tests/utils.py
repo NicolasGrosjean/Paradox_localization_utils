@@ -15,6 +15,7 @@ def get_data_dir() -> str:
     else:
         raise DataDirNotFoundException()
 
+
 def generate_random_str(length: int = 10) -> str:
-   letters = string.ascii_lowercase
-   return ''.join(random.choice(letters) for _ in range(length))
+    letters = string.ascii_lowercase
+    return "".join(random.choice(letters) for _ in range(length))

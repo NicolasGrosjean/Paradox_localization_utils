@@ -19,7 +19,9 @@ def get_args():
     return parser.parse_args()
 
 
-def create_or_update_files(project_id: int, token: str, loc_dir: str, language: str, parallel_nb: int):
+def create_or_update_files(
+    project_id: int, token: str, loc_dir: str, language: str, parallel_nb: int
+) -> dict[str, int]:
     __assert_localisation_directory_format(loc_dir, language)
     start = time.time()
     try:
@@ -28,11 +30,12 @@ def create_or_update_files(project_id: int, token: str, loc_dir: str, language: 
         print("WARNING: Fail to get the list of files from Paratranz")
         print("Files can be created but not updated")
         current_files = dict()
-    print(f"Update_paratranz on {os.path.join(loc_dir, language)}")
+    print(f"Update_paratranz on {loc_dir}")
     all_files = []
-    for root, _, files in os.walk(os.path.join(loc_dir, language)):
+    for root, _, files in os.walk(loc_dir):
         for file in files:
-            all_files.append(os.path.join(root, file))
+            if file.endswith(f"{language}.yml"):
+                all_files.append(os.path.join(root, file))
     files_with_errors = []
     Parallel(n_jobs=parallel_nb, backend="threading")(
         delayed(create_or_update_file)(
@@ -46,6 +49,7 @@ def create_or_update_files(project_id: int, token: str, loc_dir: str, language: 
         for file in files_with_errors:
             print(file)
     print(f"Total time of the execution: {compute_time(start)}")
+    return current_files
 
 
 def __assert_localisation_directory_format(loc_dir: str, language: str):
@@ -71,7 +75,14 @@ def create_or_update_file(
     files_with_errors: list,
     sleeping_before_retry: int = 2,
 ):
-    file_relative_path = file_path.replace(f"{loc_dir}\\{language}\\", "").replace(f"{loc_dir}/{language}/", "")
+    file_relative_path = (
+        file_path.replace(f"{loc_dir}\\", "")
+        .replace(f"{loc_dir}/", "")
+        .replace(f"{language}\\", "")
+        .replace(f"{language}/", "")
+        .replace(f"replace\\{language}\\", "replace\\")
+        .replace(f"replace/{language}/", "replace/")
+    )
     paratranz_path = os.path.dirname(file_relative_path)
     if file_path.endswith(f"{language}.yml"):
         try:
@@ -83,7 +94,7 @@ def create_or_update_file(
                     file_path,
                     paratranz_path,
                     sleeping_before_retry,
-                    current_files[file_relative_path.replace("\\", "/")],
+                    current_files.pop(file_relative_path.replace("\\", "/")),
                 )
             else:
                 print(f"Create file {file_relative_path}")
@@ -92,6 +103,47 @@ def create_or_update_file(
                 )
         except requests.HTTPError:
             files_with_errors.append(file_relative_path)
+
+
+def delete_files_if_wanted(
+    token: str,
+    project_id: int,
+    loc_dir: str,
+    parallel_nb: int,
+    files_to_delete: dict[str, int],
+    sleeping_before_retry: int = 2,
+):
+    if len(files_to_delete) > 0:
+        print(f"{len(files_to_delete)} files are in Paratranz but not in {loc_dir}:")
+        for file in files_to_delete:
+            print(file)
+        will_delete_files = input("Do you want to delete these files from Paratranz? [y/N]")
+        if will_delete_files == "y":
+            Parallel(n_jobs=parallel_nb, backend="threading")(
+                delayed(__delete_file_with_retry)(token, project_id, file_name, file_id, sleeping_before_retry)
+                for file_name, file_id in files_to_delete.items()
+            )
+        else:
+            print("Files NOT deleted")
+
+
+def __delete_file_with_retry(token: str, project_id: int, file_name: str, file_id: int, sleeping_before_retry: int):
+    headers = {"Authorization": token}
+    url = f"https://paratranz.cn/api/projects/{project_id}/files/{file_id}"
+    try:
+        __delete_file(url, headers)
+    except requests.HTTPError:
+        print(f"Fail to delete {file_name}, retry in {sleeping_before_retry} seconds")
+        time.sleep(sleeping_before_retry)
+        try:
+            __delete_file(url, headers)
+        except requests.HTTPError:
+            pass
+
+
+def __delete_file(url: str, headers: dict):
+    r = requests.delete(url, headers=headers)
+    manage_request_error(r)
 
 
 def __post_file_to_paratranz_with_retry(
@@ -125,6 +177,9 @@ def __post_file_to_paratranz(url: str, headers: dict, filepath: str, paratranz_p
 
 
 if __name__ == "__main__":
-    print("Version of the software: 1.1 (27th September 2024)")
+    print("Version of the software: 1.1 (28th September 2024)")
     args = get_args()
-    create_or_update_files(args.project_id, args.token, args.loc_dir, args.language, args.parallel_nb)
+    files_to_delete = create_or_update_files(
+        args.project_id, args.token, args.loc_dir, args.language, args.parallel_nb
+    )
+    delete_files_if_wanted(args.token, args.project_id, args.loc_dir, args.parallel_nb, files_to_delete)
