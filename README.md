@@ -119,7 +119,7 @@ To compile the code, run the following command
 python compile_update_paratranz.py build
 ```
 
-then put the dist/ directory in update_paratranz/
+The result of the compilation is in `update_paratranz/dist/`
 
 ### Download from Paratranz
 
