@@ -101,7 +101,7 @@ def create_or_update_file(
                 __post_file_to_paratranz_with_retry(
                     token, project_id, file_path, paratranz_path, sleeping_before_retry
                 )
-        except requests.HTTPError:
+        except requests.RequestException:
             files_with_errors.append(file_relative_path)
 
 
