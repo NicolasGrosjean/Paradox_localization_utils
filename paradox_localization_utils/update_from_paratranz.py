@@ -19,10 +19,17 @@ def get_args():
         type=str,
         help="Path of the Steam localisation directory where the translation will by written",
     )
+    parser.add_argument(
+        "-clean_raw_files",
+        action="store_true",
+        help="Remove raw files after extraction",
+    )
     return parser.parse_args()
 
 
-def update_files_from_paratranz(token: str, project_id: int, loc_dir: Path, language: str, steam_loc_dir: str | None):
+def update_files_from_paratranz(
+    token: str, project_id: int, loc_dir: Path, language: str, steam_loc_dir: str | None, clean_raw_files: bool
+):
     # Check tmp_loc_dir is set correctly
     present_french_files = False
     for _ in Path(loc_dir / language).glob(f"*_{language}.yml"):
@@ -57,9 +64,12 @@ def update_files_from_paratranz(token: str, project_id: int, loc_dir: Path, lang
         for file in (steam_loc_dir / "replace").glob("*_english.yml"):
             file.unlink()
 
+    if clean_raw_files:
+        shutil.rmtree(raw_dir, ignore_errors=True)
+
 
 if __name__ == "__main__":
     args = get_args()
     update_files_from_paratranz(
-        args.token, args.project_id, Path(args.loc_dir), args.language, args.steam_loc_dir
+        args.token, args.project_id, Path(args.loc_dir), args.language, args.steam_loc_dir, args.clean_raw_files
     )
