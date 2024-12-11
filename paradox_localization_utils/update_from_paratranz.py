@@ -61,6 +61,8 @@ def update_files_from_paratranz(
         # copy new files
         shutil.copytree(loc_dir / language, steam_loc_dir / language)
         shutil.copytree(loc_dir / "replace", steam_loc_dir / "replace")
+        for file in loc_dir.glob(f"*_{language}.yml"):
+            shutil.copy(file, steam_loc_dir / file.name)
         for file in (steam_loc_dir / "replace").glob("*_english.yml"):
             file.unlink()
 
