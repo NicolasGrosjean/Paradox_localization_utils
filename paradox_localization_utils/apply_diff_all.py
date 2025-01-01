@@ -33,6 +33,7 @@ def get_args():
     parser.add_argument("-source_lang", type=str, help="Source language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-dest_lang", type=str, help="Destination language when EUIV, HoI4 or Stellaris game")
     parser.add_argument("-keys_to_ignore", type=str, help="File with at each lines a key to ignore")
+    parser.add_argument("-old_format", action="store_true", help="Use old format for EUIV, HoI4 or Stellaris game")
     return parser.parse_args()
 
 
@@ -253,18 +254,14 @@ if __name__ == "__main__":
         else:
             with open(args.keys_to_ignore, "r", encoding="utf-8") as f:
                 keys_to_ignore = [line.replace("\n", "") for line in f.readlines()]
-        if (args.source_lang is None) and (args.dest_lang is None):
-            # source_lang = args.source_dir.split("\\")[-1]
-            # dest_lang = args.dest_dir.split("\\")[-1]
-            source_lang = "english"
-            dest_lang = "french"
-            apply_diff_all(args.old_source_dir, args.source_dir, args.dest_dir, source_lang, dest_lang, keys_to_ignore)
-            for root, _, files in os.walk(os.path.join(args.dest_dir, source_lang)):
-                dest_dir = root.replace(os.path.join(args.dest_dir, source_lang), os.path.join(args.dest_dir, dest_lang))
-                for file in files:
-                    if dest_lang in file:
-                        shutil.move(os.path.join(root, file), os.path.join(dest_dir, file))
-        else:
+        if args.old_format:
             apply_diff_all_old_formats(
                 args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
             )
+        else:
+            apply_diff_all(args.old_source_dir, args.source_dir, args.dest_dir, args.source_lang, args.dest_lang, keys_to_ignore)
+            for root, _, files in os.walk(os.path.join(args.dest_dir, args.source_lang)):
+                dest_dir = root.replace(os.path.join(args.dest_dir, args.source_lang), os.path.join(args.dest_dir, args.dest_lang))
+                for file in files:
+                    if args.dest_lang in file:
+                        shutil.move(os.path.join(root, file), os.path.join(dest_dir, file))

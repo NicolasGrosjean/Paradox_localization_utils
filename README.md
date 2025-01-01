@@ -178,13 +178,13 @@ python paradox_localization_utils/apply_diff_all.py <old_localisation_dir> <curr
 Example to apply in French files the modifications done in English
 
 ```shell
-python paradox_localization_utils/apply_diff_all.py "<...>\V1\localisation\english" "<...>\V2\localisation\english" -dest_dir "<...>\V1\localisation\french"
+python paradox_localization_utils/apply_diff_all.py "<...>\V1\localisation\english" "<...>\V2\localisation\english" -dest_dir "<...>\V1\localisation\french"  -source_lang english -dest_lang french
 ```
 
 #### For old EUIV, HoI4 or Stellaris localisation format (all files in the same directory)
 
 ```shell
-python paradox_localization_utils/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang>
+python paradox_localization_utils/apply_diff_all.py <old_localisation_dir> <current_localisation_dir> -source_lang <source_lang> -dest_lang <dest_lang> -old_format
 ```
 
 - <old_localisation_dir> contains the localisation of the old source version
