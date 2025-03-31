@@ -259,9 +259,13 @@ if __name__ == "__main__":
                 args.old_source_dir, args.source_dir, args.source_lang, args.dest_lang, keys_to_ignore
             )
         else:
-            apply_diff_all(args.old_source_dir, args.source_dir, args.dest_dir, args.source_lang, args.dest_lang, keys_to_ignore)
+            apply_diff_all(
+                args.old_source_dir, args.source_dir, args.dest_dir, args.source_lang, args.dest_lang, keys_to_ignore
+            )
             for root, _, files in os.walk(os.path.join(args.dest_dir, args.source_lang)):
-                dest_dir = root.replace(os.path.join(args.dest_dir, args.source_lang), os.path.join(args.dest_dir, args.dest_lang))
+                dest_dir = root.replace(
+                    os.path.join(args.dest_dir, args.source_lang), os.path.join(args.dest_dir, args.dest_lang)
+                )
                 for file in files:
                     if args.dest_lang in file:
                         shutil.move(os.path.join(root, file), os.path.join(dest_dir, file))

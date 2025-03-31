@@ -179,9 +179,7 @@ def test_update_file_in_replace_with_language_subdir(
     project_id: int, token: str, language: str, empty_file_in_replace_with_language_subdir: Path, tmp_path: Path
 ):
     file_id = 24
-    current_files = {
-        f"replace/{empty_file_in_replace_with_language_subdir.name}": file_id
-    }
+    current_files = {f"replace/{empty_file_in_replace_with_language_subdir.name}": file_id}
     files_with_errors = []
     mock = responses.post(f"https://paratranz.cn/api/projects/{project_id}/files/{file_id}")
     create_or_update_file(
@@ -226,9 +224,7 @@ def test_update_file_in_replace_in_root(
     project_id: int, token: str, language: str, empty_file_in_replace_in_root: Path, tmp_path: Path
 ):
     file_id = 24
-    current_files = {
-        f"replace/{empty_file_in_replace_in_root.name}": file_id
-    }
+    current_files = {f"replace/{empty_file_in_replace_in_root.name}": file_id}
     files_with_errors = []
     mock = responses.post(f"https://paratranz.cn/api/projects/{project_id}/files/{file_id}")
     create_or_update_file(
@@ -249,7 +245,6 @@ first_call = True
 
 
 def test_retry(project_id: int, token: str, language: str, empty_file: Path, tmp_path: Path, mocker: MockerFixture):
-
     def raise_error_first_call(url: str, headers: dict, filepath: str, paratranz_path: str):
         global first_call
         if first_call:

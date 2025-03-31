@@ -86,7 +86,7 @@ def get_key(line):
     :return: (localization key, value corresponding to the localization key, version of the value)
     """
     i = 0
-    while i < len(line) and (line[i] == " " or line[i] == "\t"):
+    while i < len(line) and (line[i] == " " or line[i] == "\t" or line[i] == "\ufeff"):
         i += 1
     if i < len(line) and line[i] == "#":
         raise BadLocalizationException("Comment line")
