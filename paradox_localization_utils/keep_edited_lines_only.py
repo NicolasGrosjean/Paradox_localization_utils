@@ -5,8 +5,8 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from paradox_localization_utils.read_localization_file import (
-    file_to_keys_and_lines,
-    get_key,
+    file_to_keys_and_values,
+    get_key_value_and_version,
     BadLocalizationException,
 )
 
@@ -21,12 +21,12 @@ def get_args():
     return parser.parse_args()
 
 
-def write_kept_lines(source_file_path: str, output_file_path: str, original_lines_by_key: dict[str, str]):
-    """Write in output_file_path the lines of source_file_path that are not in or are edited from original_lines_by_key
+def write_kept_lines(source_file_path: str, output_file_path: str, original_values_by_key: dict[str, str]):
+    """Write in output_file_path the lines of source_file_path that are not in or are edited from original_values_by_key
 
     :param source_file_path: File to filter
     :param output_file_path: File where we write the filtered lines
-    :param original_lines_by_key: Dictionary with the original lines by key
+    :param original_values_by_key: Dictionary with the original values by key
     """
     with open(source_file_path, "r", encoding="utf8") as f:
         lines = f.readlines()
@@ -35,13 +35,13 @@ def write_kept_lines(source_file_path: str, output_file_path: str, original_line
         language_found = False
         for line in lines:
             # Keep the language definition line
-            if not language_found and line.startswith("l_"):
+            if not language_found and line.replace("\ufeff", "").startswith("l_"):
                 f.write(line)
                 language_found = True
                 continue
             try:
-                key = get_key(line)
-                if key not in original_lines_by_key or line != original_lines_by_key[key]:
+                key, value, _ = get_key_value_and_version(line)
+                if key not in original_values_by_key or value != original_values_by_key[key]:
                     # It is a new or edited line, we keep it
                     f.write(line)
             except BadLocalizationException:
@@ -62,11 +62,11 @@ def keep_only_edited_lines(source_dir: str, original_dir: str, target_dir: str, 
             if file.endswith(language + ".yml"):
                 print(f"Processing {file}...")
                 # TODO Copy file when file is not in original_file_paths_by_file_name
-                original_lines_by_key, _ = file_to_keys_and_lines(original_file_paths_by_file_name[file])
+                original_values_versions_by_key, _ = file_to_keys_and_values(original_file_paths_by_file_name[file])
                 write_kept_lines(
                     os.path.join(root, file),
                     os.path.join(target_dir, target_prefix + file),
-                    original_lines_by_key,
+                    {key: original_values_versions_by_key[key]["value"] for key in original_values_versions_by_key},
                 )
 
 
