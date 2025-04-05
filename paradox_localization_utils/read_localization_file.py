@@ -52,11 +52,7 @@ def get_key_value_and_version(line):
     split_line = line.split(":")
     if len(split_line) < 2:
         raise BadLocalizationException("No semicolon found")
-    key = split_line[0]
-    i = 0
-    while key[i] == " " or key[i] == "\t":
-        i += 1
-    key = key[i:]
+    key = split_line[0][i:]
     text = split_line[1]
     version = None
     if len(text) > 0:
