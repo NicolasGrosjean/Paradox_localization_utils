@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 import shutil
 import sys
 
@@ -13,36 +14,51 @@ def copy_on_other_languages(localisation_dir, source_lang, dest_langs):
     :return:
     """
     for dest_lang in dest_langs:
-        # Delete destination directories if they exist
-        shutil.rmtree(os.path.join(localisation_dir, dest_lang), ignore_errors=True)
+        source_loc_dir = os.path.join(localisation_dir, source_lang)
+        dest_loc_dir = os.path.join(localisation_dir, dest_lang)
+
+        # Delete destination directories and files if they exist
+        shutil.rmtree(dest_loc_dir, ignore_errors=True)
+        for file in Path(localisation_dir).rglob(f"*_{dest_lang}.yml"):
+            file.unlink()
 
         # Copy source directory
-        shutil.copytree(os.path.join(localisation_dir, source_lang), os.path.join(localisation_dir, dest_lang))
+        for file in Path(localisation_dir).rglob(f"*_{source_lang}.yml"):
+            os.makedirs(os.path.dirname(str(file).replace(source_loc_dir, dest_loc_dir)), exist_ok=True)
+            shutil.copy(
+                file,
+                str(file).replace(source_loc_dir, dest_loc_dir).replace(f"_{source_lang}.yml", f"_{dest_lang}.yml"),
+            )
 
         # Edit copied files
-        for root, _, files in os.walk(os.path.join(localisation_dir, dest_lang)):
-            for file in files:
-                with open(os.path.join(root, file), "r", encoding="utf-8") as f:
-                    try:
-                        lines = f.readlines()
-                    except UnicodeDecodeError as e:
-                        logging.error(f"Error when parsing {file}")
-                        logging.exception(e)
-                        continue
-                with open(
-                    os.path.join(root, file.replace(f"{source_lang}.yml", f"{dest_lang}.yml")), "w", encoding="utf-8"
-                ) as f:
-                    i = 0
-                    while f"l_{source_lang}:" not in lines[i]:
-                        f.write(lines[i])
-                        i += 1
-                    if i == 0:
-                        bom_or_not = "\ufeff"
-                    else:
-                        bom_or_not = ""
-                    f.write(f"{bom_or_not}l_{dest_lang}:\n")
-                    f.writelines(lines[i + 1 :])
-                os.remove(os.path.join(root, file))
+        for file in Path(localisation_dir).rglob(f"*_{dest_lang}.yml"):
+            with open(file, "r", encoding="utf-8") as f:
+                try:
+                    lines = f.readlines()
+                except UnicodeDecodeError as e:
+                    logging.error(f"Error when parsing {file}")
+                    logging.exception(e)
+                    continue
+            with open(file, "w", encoding="utf-8") as f:
+                # Copy all lines until the line with l_<lang>:
+                i = 0
+                while i < len(lines) and f"l_{source_lang}:" not in lines[i]:
+                    f.write(lines[i])
+                    i += 1
+
+                if i == len(lines):
+                    logging.warning(f"File {file} does not contain l_{dest_lang}:")
+                    continue
+
+                # Write the line with l_<lang>:
+                if i == 0:
+                    bom_or_not = "\ufeff"
+                else:
+                    bom_or_not = ""
+                f.write(f"{bom_or_not}l_{dest_lang}:\n")
+
+                # Write the rest of the lines:
+                f.writelines(lines[i + 1 :])
 
 
 if __name__ == "__main__":

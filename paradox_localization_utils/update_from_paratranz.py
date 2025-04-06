@@ -1,4 +1,5 @@
 import argparse
+import os
 from pathlib import Path
 import shutil
 import time
@@ -24,20 +25,42 @@ def get_args():
         action="store_true",
         help="Remove raw files after extraction",
     )
+    parser.add_argument(
+        "-no-check-dest-lang-dir",
+        action="store_true",
+        help="Do not stop if loc_dir/language directory doesn't contains file ",
+    )
     return parser.parse_args()
 
 
 def update_files_from_paratranz(
-    token: str, project_id: int, loc_dir: Path, language: str, steam_loc_dir: str | None, clean_raw_files: bool
-):
-    # Check tmp_loc_dir is set correctly
-    present_french_files = False
-    for _ in Path(loc_dir / language).glob(f"*_{language}.yml"):
-        present_french_files = True
-        break
-    if not present_french_files:
-        print("ERROR: Call copy_on_other_languages before")
-        exit()
+    token: str,
+    project_id: int,
+    loc_dir: Path,
+    dest_language: str,
+    steam_loc_dir: str | None,
+    clean_raw_files: bool,
+    no_check_dest_lang_dir: bool,
+) -> None:
+    """Update localisation files from Paratranz
+
+    :param token: Paratranz token
+    :param project_id: Project ID on Paratranz
+    :param loc_dir: Path to the localisation directory where the translation will be written
+    :param dest_language: Language to update
+    :param steam_loc_dir: Localisation directory for Steam, if None, no files will be copied to Steam
+    :param clean_raw_files: Delete raw files after extraction
+    """
+
+    # Check loc_dir is set correctly
+    if not no_check_dest_lang_dir:
+        present_dest_language_files = False
+        for _ in Path(loc_dir / dest_language).glob(f"*_{dest_language}.yml"):
+            present_dest_language_files = True
+            break
+        if not present_dest_language_files:
+            print("ERROR: Call copy_on_other_languages before")
+            exit()
 
     # download_paratranz
     update_artifact(token, project_id)
@@ -50,8 +73,8 @@ def update_files_from_paratranz(
     shutil.rmtree(utf8_dir, ignore_errors=True)
 
     # extract paratanz
-    extract_paratranz_localisation_dir(str(raw_dir.resolve()), language, loc_dir / language, True)
-    extract_paratranz_localisation_dir(str(raw_dir.resolve()), language, loc_dir, True)
+    extract_paratranz_localisation_dir(str(raw_dir.resolve()), dest_language, loc_dir / dest_language, True)
+    extract_paratranz_localisation_dir(str(raw_dir.resolve()), dest_language, loc_dir, True)
 
     if steam_loc_dir:
         steam_loc_dir = Path(steam_loc_dir)
@@ -59,12 +82,10 @@ def update_files_from_paratranz(
         shutil.rmtree(steam_loc_dir, ignore_errors=True)
 
         # copy new files
-        shutil.copytree(loc_dir / language, steam_loc_dir / language)
-        shutil.copytree(loc_dir / "replace", steam_loc_dir / "replace")
-        for file in loc_dir.glob(f"*_{language}.yml"):
-            shutil.copy(file, steam_loc_dir / file.name)
-        for file in (steam_loc_dir / "replace").glob("*_english.yml"):
-            file.unlink()
+        for file in loc_dir.rglob(f"*_{dest_language}.yml"):
+            new_file = str(file).replace(str(loc_dir), str(steam_loc_dir))
+            os.makedirs(os.path.dirname(new_file), exist_ok=True)
+            shutil.copy(file, new_file)
 
     if clean_raw_files:
         shutil.rmtree(raw_dir, ignore_errors=True)
@@ -73,5 +94,11 @@ def update_files_from_paratranz(
 if __name__ == "__main__":
     args = get_args()
     update_files_from_paratranz(
-        args.token, args.project_id, Path(args.loc_dir), args.language, args.steam_loc_dir, args.clean_raw_files
+        args.token,
+        args.project_id,
+        Path(args.loc_dir),
+        args.language,
+        args.steam_loc_dir,
+        args.clean_raw_files,
+        args.no_check_dest_lang_dir,
     )
