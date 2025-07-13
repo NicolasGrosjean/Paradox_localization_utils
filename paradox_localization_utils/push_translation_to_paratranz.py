@@ -5,7 +5,7 @@ import requests
 import time
 
 from paradox_localization_utils.update_paratranz import get_project_files
-from paradox_localization_utils.utils import compute_time, manage_request_error
+from paradox_localization_utils.lib.utils import compute_time, manage_request_error
 
 
 def get_args():

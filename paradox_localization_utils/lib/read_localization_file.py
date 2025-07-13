@@ -1,4 +1,7 @@
-def file_to_keys_and_values(absolute_file_path):
+from pathlib import Path
+
+
+def file_to_keys_and_values(absolute_file_path: str | Path) -> tuple[dict[str, dict[str, str | int | None]], str]:
     """
     Extract key and values from a Paradox localization file
     :param absolute_file_path: Absolute file path of a Paradox localization file
@@ -8,7 +11,7 @@ def file_to_keys_and_values(absolute_file_path):
         lines = f.readlines()
     if len(lines) == 0:
         return dict(), ""
-    res = dict()
+    res: dict[str, dict[str, str]] = dict()
     for i in range(len(lines)):
         try:
             key, value, version = get_key_value_and_version(lines[i])
@@ -19,7 +22,7 @@ def file_to_keys_and_values(absolute_file_path):
     return res, lines[0]
 
 
-def file_to_keys_and_lines(absolute_file_path):
+def file_to_keys_and_lines(absolute_file_path: str | Path) -> tuple[dict[str, str], str]:
     """
     Extract key and lines from a Paradox localization file
     :param absolute_file_path: Absolute file path of a Paradox localization file
@@ -27,7 +30,7 @@ def file_to_keys_and_lines(absolute_file_path):
     """
     with open(absolute_file_path, "r", encoding="utf8") as f:
         lines = f.readlines()
-    res = dict()
+    res: dict[str, str] = dict()
     for i in range(1, len(lines)):
         try:
             key = get_key(lines[i])
@@ -38,7 +41,7 @@ def file_to_keys_and_lines(absolute_file_path):
     return res, lines[0]
 
 
-def get_key_value_and_version(line):
+def get_key_value_and_version(line: str) -> tuple[str, str, int | None]:
     """
     Extract the key, the value and the version of a string representing the line of a Paradox localization file
     :param line: string representing the line of a Paradox localization file
@@ -75,7 +78,7 @@ def get_key_value_and_version(line):
     return key, text, version
 
 
-def get_key(line):
+def get_key(line: str) -> str:
     """
     Extract the key of a string representing the line of a Paradox localization file
     :param line: string representing the line of a Paradox localization file

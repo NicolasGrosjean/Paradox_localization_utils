@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
-from paradox_localization_utils.read_localization_file import get_key_value_and_version, BadLocalizationException
+from paradox_localization_utils.lib.write_localization_file import edit_file_with_dict
 
 
 def get_args():
@@ -23,31 +23,11 @@ def extract_paratranz_localisation(paratranz_file_path: str, localisation_file_p
         return
     with open(paratranz_file_path, "r", encoding="utf8") as f:
         raw_paratranz_data = json.load(f)
-    paratranz_data = dict()
+    paratranz_data: dict[str, str] = dict()
     for line in raw_paratranz_data:
         if len(line["translation"]) > 0 and (extract_not_review or line["stage"] == 5):
             paratranz_data[line["key"].split(":")[0]] = line["translation"]
-
-    with open(localisation_file_path, "r", encoding="utf8") as f:
-        lines = f.readlines()
-
-    with open(localisation_file_path, "w", encoding="utf8") as f:
-        for i in range(len(lines)):
-            if i == 0:
-                # Keep the language definition line
-                f.write(lines[0])
-            else:
-                try:
-                    key, value, version = get_key_value_and_version(lines[i])
-                    if version is None:
-                        version = ""
-                    if key in paratranz_data and paratranz_data[key] != value:
-                        f.write(" " + key + ":" + str(version) + ' "' + paratranz_data[key] + '"\n')
-                    else:
-                        f.write(lines[i])
-                except BadLocalizationException:
-                    f.write(lines[i])
-                    continue
+    edit_file_with_dict(localisation_file_path, paratranz_data)
 
 
 def extract_paratranz_localisation_dir(

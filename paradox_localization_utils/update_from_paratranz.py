@@ -5,6 +5,7 @@ import shutil
 import time
 from download_paratranz import download_artifact, update_artifact
 from extract_paratranz_translation import extract_paratranz_localisation_dir
+from paradox_localization_utils.copy_code_only_texts import copy_code_only_texts
 
 
 def get_args():
@@ -64,7 +65,7 @@ def update_files_from_paratranz(
 
     # download_paratranz
     update_artifact(token, project_id)
-    waiting_time = 20
+    waiting_time = 180
     print(f"Artifacts updated, wait {waiting_time} seconds before downloading")
     time.sleep(waiting_time)
     raw_dir = loc_dir / ".." / "raw"
@@ -75,6 +76,9 @@ def update_files_from_paratranz(
     # extract paratanz
     extract_paratranz_localisation_dir(str(raw_dir.resolve()), dest_language, loc_dir / dest_language, True)
     extract_paratranz_localisation_dir(str(raw_dir.resolve()), dest_language, loc_dir, True)
+
+    # copy code only texts
+    copy_code_only_texts(loc_dir, loc_dir, "english", dest_language)
 
     if steam_loc_dir:
         steam_loc_dir = Path(steam_loc_dir)

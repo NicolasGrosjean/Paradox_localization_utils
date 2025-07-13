@@ -1,11 +1,12 @@
 import argparse
 import os
+from pathlib import Path
 import pandas as pd
 
 import sys
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
-from paradox_localization_utils.read_localization_file import (
+from paradox_localization_utils.lib.read_localization_file import (
     file_to_keys_and_values,
     get_key_value_and_version,
     BadLocalizationException,
@@ -25,7 +26,9 @@ def get_args():
     return parser.parse_args()
 
 
-def extract_translation_from_CK2_file(ck2_loc_file, extracted_translation, source_col_ck2, dest_col_ck2):
+def extract_translation_from_CK2_file(
+    ck2_loc_file: str | Path, extracted_translation: dict[str, str], source_col_ck2: int, dest_col_ck2: int
+):
     """
     Add {source_text: dest_text} to extracted_translation dict
     :param ck2_loc_file: Path of the CK2 localisation file
@@ -46,7 +49,9 @@ def extract_translation_from_CK2_file(ck2_loc_file, extracted_translation, sourc
             extracted_translation[split[source_col_ck2]] = split[dest_col_ck2]
 
 
-def extract_translation_from_yml_file(source_loc_file, dest_loc_file, extracted_translation):
+def extract_translation_from_yml_file(
+    source_loc_file: str | Path, dest_loc_file: str | Path, extracted_translation: dict[str, str]
+):
     """
     Add {source_text: dest_text} to extracted_translation dict
     :param source_loc_file: Path of YML source file
@@ -61,7 +66,7 @@ def extract_translation_from_yml_file(source_loc_file, dest_loc_file, extracted_
             extracted_translation[source_texts[source_key]["value"]] = dest_texts[source_key]["value"]
 
 
-def insert_text(file_path, extracted_translation, target_source_files):
+def insert_text(file_path: str | Path, extracted_translation: dict[str, str], target_source_files: dict[str, str]):
     """
     Modify localisation yml file be inserting extracted translation (key -> source_text -> extracted_dest_text)
     :param file_path: File path of the file to edit
@@ -96,14 +101,14 @@ def insert_text(file_path, extracted_translation, target_source_files):
 
 
 def extract_existing_translation(
-    extract_source_dir,
-    extract_dest_dir,
-    target_source_dir,
-    target_dest_dir,
-    source_lang,
-    dest_lang,
-    source_col_ck2,
-    dest_col_ck2,
+    extract_source_dir: str | Path,
+    extract_dest_dir: str | Path,
+    target_source_dir: str | Path,
+    target_dest_dir: str | Path,
+    source_lang: str,
+    dest_lang: str,
+    source_col_ck2: int,
+    dest_col_ck2: int,
 ):
     # Store extracted translation {source_text: dest_text}
     extracted_translation = dict()

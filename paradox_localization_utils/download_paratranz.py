@@ -5,7 +5,7 @@ import time
 import zipfile
 import requests
 
-from utils import manage_request_error
+from lib.utils import manage_request_error
 
 
 def get_args():

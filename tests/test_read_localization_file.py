@@ -1,7 +1,7 @@
 import unittest
 
 import os
-from paradox_localization_utils.read_localization_file import (
+from paradox_localization_utils.lib.read_localization_file import (
     get_key_value_and_version,
     BadLocalizationException,
     file_to_keys_and_values,
