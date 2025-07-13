@@ -11,7 +11,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 joblib = "^1.4.2"
-requests = "^2.32.3"
+requests = "^2.32.4"
 pandas = "^2.2.3"
 python-levenshtein = "^0.26.0"
 
