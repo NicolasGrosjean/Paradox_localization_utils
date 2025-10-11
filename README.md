@@ -15,12 +15,13 @@ Example : If I translate from English to French, the source directory refers to 
 
 ## Installation
 
-I recommend you to install a Python environment with poetry, conda, virtualenv or pipenv.
+I recommend you to install a Python environment with uv, conda, virtualenv or pipenv.
 
-### Poetry
+
+### UV
 
 ```shell
-poetry install
+uv sync
 ```
 
 #### Pre-commit (only need for contributing to the project)
@@ -35,7 +36,7 @@ pre-commit install
 
 ### Conda
 
-If you prefer conda to poetry, [download and install miniconda](https://docs.conda.io/en/latest/miniconda.html)
+If you prefer conda to uv, [download and install miniconda](https://docs.conda.io/en/latest/miniconda.html)
 
 Create a conda environment
 

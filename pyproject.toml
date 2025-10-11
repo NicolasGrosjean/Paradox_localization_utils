@@ -1,29 +1,31 @@
 [tool.black]
 line-length = 119
 
-[tool.poetry]
+[project]
 name = "paradox_localization_utils"
 version = "0.1.0"
 description = "Utilitaries on Paradox localisation files"
-authors = ["NicolasGrosjean <grosjen@hotmail.fr>"]
 readme = "README.md"
+requires-python=">=3.10,<3.14"
+license = "MIT"
+authors = [
+    { name = "GROSJEAN_Nicolas", email = "grosjen@hotmail.fr"}
+]
+dependencies = [
+    "joblib>=1.4.2,<2.0.0",
+    "requests>=2.32.4,<3.0.0",
+    "pandas>=2.2.3,<3.0.0",
+    "python-levenshtein>=0.26.0,<1.0.0"
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-joblib = "^1.4.2"
-requests = "^2.32.4"
-pandas = "^2.2.3"
-python-levenshtein = "^0.26.0"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
-pre-commit = "^3.8.0"
-pytest-cov = "^5.0.0"
-responses = "^0.25.3"
-pytest-mock = "^3.14.0"
-genbadge = {extras = ["all"], version = "^1.1.1"}
-cx-freeze = "^7.2.2"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3,<9.0.0",
+    "pre-commit>=3.8.0,<4.0.0",
+    "pytest-cov>=5.0.0,<6.0.0",
+    "responses>=0.25.3,<1.0.0",
+    "pytest-mock>=3.14.0,<4.0.0",
+    "cx-freeze>=7.2.2,<8.0.0",
+    "genbadge[all]>=1.1.1,<2.0.0"
+]
