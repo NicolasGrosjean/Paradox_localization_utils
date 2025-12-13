@@ -88,7 +88,7 @@ def add_missing_lines_eu_hoi_stellaris(source_dir, source_lang, dest_lang):
         for file in files:
             if file.endswith(dest_lang + ".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
-                rel_to_dest_abs_path[abs_path[: abs_path.find("_l_")].replace(source_dir, "")] = abs_path
+                rel_to_dest_abs_path[abs_path[: abs_path.find("_l_")].replace(f"{source_dir}/{dest_lang}", "").replace(source_dir, "")] = abs_path
                 file_dest_texts, _ = file_to_keys_and_lines(abs_path)
                 os.remove(abs_path)
                 dest_texts = {**dest_texts, **file_dest_texts}
@@ -96,7 +96,7 @@ def add_missing_lines_eu_hoi_stellaris(source_dir, source_lang, dest_lang):
         for file in files:
             if file.endswith(source_lang + ".yml"):
                 abs_path = os.path.abspath(os.path.join(root, file))
-                rel_path = abs_path[: abs_path.find("_l_")].replace(source_dir, "")
+                rel_path = abs_path[: abs_path.find("_l_")].replace(f"{source_dir}/{source_lang}", "").replace(source_dir, "")
                 if rel_path in rel_to_dest_abs_path:
                     dest_file_path = rel_to_dest_abs_path[rel_path]
                 else:
