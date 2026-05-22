@@ -60,6 +60,9 @@ def extract_translation_from_yml_file(
     :return:
     """
     source_texts, _ = file_to_keys_and_values(source_loc_file)
+    if not os.path.exists(dest_loc_file):
+        print(f"File {dest_loc_file} doesn't exist, skipping")
+        return
     dest_texts, _ = file_to_keys_and_values(dest_loc_file)
     for source_key in source_texts.keys():
         if source_key in dest_texts.keys() and source_texts[source_key]["value"] != "":
